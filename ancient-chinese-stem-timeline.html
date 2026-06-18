@@ -1,0 +1,2495 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>中国古代数理科技时间线 | 数理千秋 · 算法传承</title>
+<script type="importmap">
+{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js"}}
+</script>
+<style>
+/* ================================================================
+   CSS Variables & Reset
+   ================================================================ */
+:root {
+  --bg: #faf7f1;
+  --card-bg: #fffef8;
+  --text: #2e241a;
+  --text-light: #6b5c4a;
+  --accent: #8b2d2d;
+  --accent-glow: #c4554d;
+  --gold: #b8860b;
+  --gold-bright: #d4a843;
+  --ink: #1a1008;
+  --line: #d4c5a9;
+  --math: #7b4b3a;
+  --astro: #1a5060;
+  --physics: #4a3a5e;
+  --comp: #2d5b3f;
+  --hidden-gem: #c4453d;
+  --shadow-sm: 0 1px 4px rgba(26,16,8,0.06);
+  --shadow-md: 0 6px 24px rgba(26,16,8,0.10);
+  --shadow-lg: 0 12px 48px rgba(26,16,8,0.16);
+  --shadow-glow: 0 0 28px rgba(196,85,77,0.25);
+  --radius: 14px;
+  --radius-sm: 10px;
+  --transition: 0.32s cubic-bezier(0.4,0,0.2,1);
+  --font: "Noto Serif SC", "Source Han Serif SC", "Songti SC", "SimSun", "KaiTi", serif;
+  --font-sans: "PingFang SC", "Microsoft YaHei", "Noto Sans SC", sans-serif;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; font-size: 16px; }
+body {
+  font-family: var(--font);
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.75;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ================================================================
+   Canvas Particles Background
+   ================================================================ */
+#particleCanvas {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ================================================================
+   HERO SECTION
+   ================================================================ */
+.hero {
+  position: relative;
+  z-index: 1;
+  min-height: 58vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 40px 20px;
+  overflow: hidden;
+}
+
+/* Celestial Ring */
+.hero-ring-wrap {
+  position: relative;
+  width: 260px; height: 260px;
+  margin-bottom: 10px;
+  perspective: 800px;
+}
+.hero-ring {
+  width: 100%; height: 100%;
+  border-radius: 50%;
+  border: 2px solid rgba(184,134,11,0.35);
+  position: absolute;
+  animation: ringFloat 7s ease-in-out infinite;
+}
+.hero-ring:nth-child(1) { animation-delay: 0s; }
+.hero-ring:nth-child(2) {
+  width: 74%; height: 74%;
+  top: 13%; left: 13%;
+  border-color: rgba(184,134,11,0.25);
+  animation-delay: -2s;
+  animation-duration: 9s;
+}
+.hero-ring:nth-child(3) {
+  width: 48%; height: 48%;
+  top: 26%; left: 26%;
+  border-color: rgba(139,45,45,0.22);
+  animation-delay: -4s;
+  animation-duration: 11s;
+  border-style: dashed;
+}
+.hero-dot {
+  position: absolute;
+  width: 6px; height: 6px;
+  background: var(--gold-bright);
+  border-radius: 50%;
+  box-shadow: 0 0 10px rgba(212,168,67,0.6);
+}
+@keyframes ringFloat {
+  0%, 100% { transform: rotateX(65deg) rotateY(0deg) rotateZ(0deg); }
+  25% { transform: rotateX(60deg) rotateY(90deg) rotateZ(5deg); }
+  50% { transform: rotateX(70deg) rotateY(180deg) rotateZ(0deg); }
+  75% { transform: rotateX(60deg) rotateY(270deg) rotateZ(-5deg); }
+}
+
+/* Hero Text */
+.hero-seal {
+  font-size: clamp(2.8rem, 8vw, 5.2rem);
+  font-weight: 900;
+  color: var(--accent);
+  letter-spacing: clamp(6px, 2vw, 14px);
+  text-shadow: 3px 3px 0 rgba(139,45,45,0.10), 0 0 80px rgba(139,45,45,0.12);
+  line-height: 1.1;
+  position: relative;
+  z-index: 2;
+  animation: sealReveal 1.2s ease-out;
+}
+@keyframes sealReveal {
+  from { opacity: 0; transform: translateY(30px); letter-spacing: 30px; }
+  to { opacity: 1; transform: translateY(0); letter-spacing: clamp(6px, 2vw, 14px); }
+}
+.hero-sub {
+  font-family: var(--font-sans);
+  font-size: clamp(0.95rem, 2vw, 1.2rem);
+  color: var(--text-light);
+  letter-spacing: 5px;
+  margin-top: 10px;
+  z-index: 2;
+  animation: fadeUp 1.2s ease-out 0.3s both;
+}
+.hero-desc {
+  max-width: 680px;
+  margin-top: 16px;
+  font-size: 0.92rem;
+  color: var(--text-light);
+  line-height: 1.9;
+  z-index: 2;
+  animation: fadeUp 1.2s ease-out 0.5s both;
+}
+.hero-scroll-hint {
+  position: absolute;
+  bottom: 36px;
+  font-family: var(--font-sans);
+  font-size: 0.75rem;
+  color: #b8a88a;
+  letter-spacing: 2px;
+  z-index: 2;
+  animation: fadeUp 1.2s ease-out 0.9s both, bounceHint 2s ease-in-out 2s infinite;
+}
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(18px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes bounceHint {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(8px); }
+}
+
+/* ================================================================
+   Globe Section
+   ================================================================ */
+.globe-section {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 900px;
+  height: clamp(440px, 55vh, 580px);
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: radial-gradient(ellipse at center, rgba(184,134,11,0.06) 0%, transparent 70%);
+  cursor: grab;
+  user-select: none;
+  -webkit-user-select: none;
+}
+.globe-section::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 10%;
+  width: 80%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--line), transparent);
+}
+.globe-section:active { cursor: grabbing; }
+.globe-section.dragging { cursor: grabbing; }
+.globe-canvas {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+.globe-hint {
+  position: absolute;
+  bottom: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 24px;
+  font-family: var(--font-sans);
+  font-size: 0.76rem;
+  color: var(--text-light);
+  letter-spacing: 1px;
+  pointer-events: none;
+  transition: opacity 0.4s;
+}
+.globe-hint.fading { opacity: 0.35; }
+.globe-highlight {
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  font-family: var(--font-sans);
+  font-size: 0.78rem;
+  color: var(--accent);
+  letter-spacing: 2px;
+  opacity: 0;
+  transition: opacity 0.3s;
+  background: rgba(255,254,248,0.9);
+  padding: 6px 16px;
+  border-radius: 14px;
+  box-shadow: var(--shadow-md);
+  white-space: nowrap;
+}
+.globe-highlight.show { opacity: 1; }
+@media (max-width: 768px) {
+  .globe-section { height: clamp(340px, 42vh, 420px); max-width: 100%; }
+  .globe-hint { font-size: 0.68rem; gap: 14px; }
+}
+
+/* ================================================================
+   Toolbar
+   ================================================================ */
+.toolbar {
+  position: sticky; top: 0; z-index: 100;
+  background: rgba(250,247,241,0.82);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  border-bottom: 1px solid var(--line);
+  padding: 14px 20px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+  align-items: center;
+}
+.toolbar-group {
+  display: flex; gap: 6px; align-items: center; flex-wrap: wrap; justify-content: center;
+}
+.toolbar-label {
+  font-family: var(--font-sans);
+  font-size: 0.8rem;
+  color: var(--text-light);
+  letter-spacing: 1px;
+  margin-right: 2px;
+}
+
+/* Buttons */
+.btn {
+  font-family: var(--font-sans);
+  font-size: 0.82rem;
+  padding: 7px 18px;
+  border-radius: 22px;
+  border: 1.5px solid var(--line);
+  background: var(--card-bg);
+  color: var(--text-light);
+  cursor: pointer;
+  transition: all var(--transition);
+  white-space: nowrap;
+  letter-spacing: 0.5px;
+  position: relative;
+  overflow: hidden;
+}
+.btn::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, transparent 40%, rgba(255,255,255,0.4) 50%, transparent 60%);
+  transform: translateX(-100%);
+  transition: transform 0.5s;
+}
+.btn:hover::after { transform: translateX(100%); }
+.btn:hover {
+  border-color: var(--gold);
+  color: var(--ink);
+  background: #fdf8ed;
+  box-shadow: 0 2px 12px rgba(184,134,11,0.12);
+  transform: translateY(-1px);
+}
+.btn.active {
+  background: var(--accent);
+  color: #fff;
+  border-color: var(--accent);
+  box-shadow: 0 2px 16px rgba(139,45,45,0.25);
+}
+.btn.math.active { background: var(--math); border-color: var(--math); }
+.btn.astro.active { background: var(--astro); border-color: var(--astro); }
+.btn.physics.active { background: var(--physics); border-color: var(--physics); }
+.btn.comp.active { background: var(--comp); border-color: var(--comp); }
+.btn.gem-btn { color: var(--hidden-gem); border-color: var(--hidden-gem); }
+.btn.gem-btn.active { background: var(--hidden-gem); border-color: var(--hidden-gem); color: #fff; }
+
+.btn.era {
+  font-size: 0.76rem;
+  padding: 5px 14px;
+  border-radius: 16px;
+  background: transparent;
+  border: 1px solid transparent;
+  color: var(--text-light);
+}
+.btn.era:hover { background: #f0e8d8; color: var(--ink); }
+.btn.era.active { background: var(--ink); color: #faf7f1; border-color: var(--ink); }
+
+/* category badge mini */
+.cat-math { background: #f3e8e0; color: var(--math); border: 1px solid #d4bfad; }
+.cat-astro { background: #dce9ec; color: var(--astro); border: 1px solid #aec8ce; }
+.cat-physics { background: #e9e2f0; color: var(--physics); border: 1px solid #c5b6d2; }
+.cat-comp { background: #dbe8de; color: var(--comp); border: 1px solid #acc8b5; }
+
+/* ================================================================
+   Stats Bar
+   ================================================================ */
+.stats-bar {
+  display: flex; flex-wrap: wrap; gap: 16px;
+  justify-content: center;
+  padding: 10px 20px 22px;
+  font-family: var(--font-sans);
+  font-size: 0.8rem;
+  color: var(--text-light);
+  position: relative;
+  z-index: 1;
+}
+.stats-bar span {
+  background: var(--card-bg);
+  padding: 4px 16px;
+  border-radius: 14px;
+  border: 1px solid var(--line);
+  box-shadow: var(--shadow-sm);
+}
+.stats-bar b { color: var(--accent); }
+
+/* ================================================================
+   Timeline
+   ================================================================ */
+.timeline-wrap {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 0 20px 30px;
+  position: relative;
+  z-index: 1;
+}
+/* center line with glow */
+.timeline-wrap::before {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: linear-gradient(to bottom, transparent, var(--line) 2%, var(--gold) 20%, var(--gold) 80%, var(--line) 98%, transparent);
+  transform: translateX(-50%);
+  box-shadow: 0 0 12px rgba(184,134,11,0.15);
+}
+
+/* Era Label */
+.era-label {
+  text-align: center;
+  position: relative;
+  z-index: 2;
+  margin: 50px 0 16px;
+}
+.era-label:first-of-type { margin-top: 16px; }
+.era-label-inner {
+  display: inline-block;
+  background: var(--ink);
+  color: #faf7f1;
+  font-family: var(--font);
+  font-size: 1.1rem;
+  font-weight: 700;
+  letter-spacing: 5px;
+  padding: 10px 38px;
+  border-radius: 26px;
+  position: relative;
+  box-shadow: 0 4px 20px rgba(26,16,8,0.20);
+  transition: all 0.5s;
+}
+.era-label-inner.highlight {
+  background: var(--accent-glow);
+  box-shadow: 0 0 32px rgba(196,85,77,0.45);
+  transform: scale(1.04);
+}
+
+/* Timeline Item */
+.tl-item {
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  margin-bottom: 32px;
+  z-index: 2;
+  opacity: 0;
+  transform: translateY(40px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+.tl-item.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+.tl-item.left { justify-content: flex-start; padding-right: calc(50% + 34px); }
+.tl-item.right { justify-content: flex-end; padding-left: calc(50% + 34px); }
+.tl-item.hidden-filter { display: none; }
+
+/* Node */
+.tl-dot {
+  position: absolute;
+  left: 50%;
+  top: 24px;
+  transform: translate(-50%, -50%);
+  width: 18px; height: 18px;
+  border-radius: 50%;
+  background: var(--accent);
+  border: 3px solid var(--bg);
+  box-shadow: 0 0 0 4px var(--line), 0 0 16px rgba(139,45,45,0.20);
+  z-index: 3;
+  transition: all var(--transition);
+  animation: dotPulse 3s ease-in-out infinite;
+}
+.tl-dot.gem-dot {
+  background: var(--hidden-gem);
+  box-shadow: 0 0 0 4px var(--gold-bright), 0 0 20px rgba(196,69,61,0.40);
+  animation: dotPulseGem 2s ease-in-out infinite;
+}
+@keyframes dotPulse {
+  0%, 100% { box-shadow: 0 0 0 4px var(--line), 0 0 16px rgba(139,45,45,0.20); }
+  50% { box-shadow: 0 0 0 8px rgba(212,197,169,0.4), 0 0 24px rgba(139,45,45,0.35); }
+}
+@keyframes dotPulseGem {
+  0%, 100% { box-shadow: 0 0 0 4px var(--gold-bright), 0 0 20px rgba(196,69,61,0.40); }
+  50% { box-shadow: 0 0 0 10px rgba(212,168,67,0.35), 0 0 32px rgba(196,69,61,0.60); }
+}
+
+/* Card */
+.tl-card {
+  background: var(--card-bg);
+  border-radius: var(--radius);
+  padding: 20px 24px;
+  box-shadow: var(--shadow-sm);
+  border: 1px solid #ebe3d5;
+  cursor: pointer;
+  transition: all var(--transition);
+  width: 100%;
+  position: relative;
+  transform-style: preserve-3d;
+  perspective: 600px;
+}
+.tl-card:hover {
+  box-shadow: var(--shadow-md), 0 0 40px rgba(184,134,11,0.08);
+  border-color: var(--gold-bright);
+  transform: translateY(-3px);
+}
+.tl-card.gem-card {
+  border-left: 4px solid var(--hidden-gem);
+  background: linear-gradient(135deg, #fffef8 0%, #fdf3f3 100%);
+}
+.tl-card .card-year {
+  font-family: var(--font-sans);
+  font-size: 0.76rem;
+  color: var(--gold);
+  letter-spacing: 1px;
+  font-weight: 600;
+}
+.tl-card .card-title {
+  font-size: 1.14rem;
+  font-weight: 700;
+  color: var(--ink);
+  margin: 4px 0 6px;
+  line-height: 1.4;
+}
+.tl-card .card-person {
+  font-size: 0.86rem;
+  color: var(--text-light);
+  margin-bottom: 8px;
+}
+.tl-card .card-cats {
+  display: flex; gap: 5px; flex-wrap: wrap; margin-bottom: 8px;
+}
+.tl-card .card-cats span {
+  font-family: var(--font-sans);
+  font-size: 0.68rem;
+  padding: 2px 10px;
+  border-radius: 10px;
+  letter-spacing: 0.5px;
+}
+.tl-card .card-excerpt {
+  font-size: 0.85rem;
+  color: var(--text-light);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  line-height: 1.8;
+}
+.tl-card .card-gem-badge {
+  position: absolute;
+  top: 12px; right: 16px;
+  font-family: var(--font-sans);
+  font-size: 0.68rem;
+  color: var(--hidden-gem);
+  letter-spacing: 1px;
+  opacity: 0.75;
+}
+.tl-card .card-hint {
+  font-family: var(--font-sans);
+  font-size: 0.7rem;
+  color: #b8a88a;
+  margin-top: 10px;
+  letter-spacing: 0.5px;
+  transition: color 0.3s;
+}
+.tl-card:hover .card-hint { color: var(--accent); }
+
+/* ================================================================
+   Modal
+   ================================================================ */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  background: rgba(20,14,6,0.60);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  animation: fadeIn 0.22s ease;
+}
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+.modal {
+  background: var(--card-bg);
+  border-radius: 18px;
+  max-width: 680px;
+  width: 100%;
+  max-height: 84vh;
+  overflow-y: auto;
+  box-shadow: var(--shadow-lg), 0 0 60px rgba(139,45,45,0.12);
+  padding: 34px 30px;
+  position: relative;
+  animation: modalIn 0.35s cubic-bezier(0.34,1.56,0.64,1);
+  border: 1px solid #ebe3d5;
+}
+@keyframes modalIn {
+  from { opacity: 0; transform: translateY(40px) scale(0.94); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+.modal .modal-close {
+  position: sticky;
+  top: 0;
+  float: right;
+  background: #f0e8d8;
+  border: none;
+  font-size: 1.3rem;
+  cursor: pointer;
+  color: var(--text-light);
+  transition: all 0.25s;
+  width: 40px; height: 40px;
+  display: flex; align-items: center; justify-content: center;
+  border-radius: 50%;
+  z-index: 5;
+  margin: -8px -8px 0 0;
+}
+.modal .modal-close:hover { background: var(--accent); color: #fff; }
+
+.modal .m-era {
+  font-family: var(--font-sans);
+  font-size: 0.76rem;
+  color: var(--gold);
+  letter-spacing: 2px;
+  font-weight: 600;
+}
+.modal .m-title {
+  font-size: 1.7rem;
+  font-weight: 900;
+  color: var(--ink);
+  margin: 4px 0 6px;
+  line-height: 1.3;
+}
+.modal .m-person {
+  font-size: 0.95rem;
+  color: var(--text-light);
+  margin-bottom: 10px;
+}
+.modal .m-cats { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 18px; }
+.modal .m-cats span {
+  font-family: var(--font-sans);
+  font-size: 0.72rem;
+  padding: 3px 14px;
+  border-radius: 12px;
+}
+.modal .m-gem-tag {
+  display: inline-block;
+  background: var(--hidden-gem);
+  color: #fff;
+  font-family: var(--font-sans);
+  font-size: 0.72rem;
+  padding: 3px 12px;
+  border-radius: 10px;
+  margin-bottom: 14px;
+  letter-spacing: 1px;
+  animation: gemShimmer 2s ease-in-out infinite;
+}
+@keyframes gemShimmer {
+  0%, 100% { box-shadow: 0 0 8px rgba(196,69,61,0.3); }
+  50% { box-shadow: 0 0 22px rgba(196,69,61,0.55); }
+}
+.modal .m-image-wrap {
+  width: 100%;
+  max-height: 280px;
+  overflow: hidden;
+  border-radius: 12px;
+  margin-bottom: 18px;
+  background: #f5f0e6;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #ebe3d5;
+  position: relative;
+  box-shadow: inset 0 0 20px rgba(139,45,45,0.04);
+}
+.modal .m-image-wrap img {
+  width: 100%;
+  height: auto;
+  max-height: 280px;
+  object-fit: contain;
+  display: block;
+}
+.modal .m-image-fallback {
+  display: none;
+  padding: 40px 20px;
+  text-align: center;
+  color: #b8a88a;
+  font-family: var(--font);
+  font-size: 0.85rem;
+  letter-spacing: 1px;
+  background: linear-gradient(135deg, #f8f3e8 0%, #fdfcf7 50%, #f8f3e8 100%);
+  width: 100%;
+}
+.modal .m-image-fallback .fallback-icon {
+  font-size: 3rem;
+  display: block;
+  margin-bottom: 8px;
+  opacity: 0.5;
+}
+.modal .m-image-fallback .fallback-text {
+  font-size: 0.8rem;
+  opacity: 0.6;
+}
+.modal .m-image-fallback.show { display: block; }
+.modal section {
+  margin-bottom: 18px;
+  background: #fdfcf7;
+  border-radius: var(--radius-sm);
+  padding: 16px 18px;
+  border: 1px solid #f0ebe0;
+}
+.modal section h3 {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--accent);
+  margin-bottom: 8px;
+  padding-left: 14px;
+  border-left: 3px solid var(--accent);
+}
+.modal section p {
+  font-size: 0.9rem;
+  color: var(--text-light);
+  line-height: 2;
+  text-align: justify;
+}
+
+/* ================================================================
+   Hidden Gems Section
+   ================================================================ */
+.gems-section {
+  max-width: 960px;
+  margin: 50px auto 0;
+  padding: 36px 20px 60px;
+  border-top: 2px dashed var(--line);
+  position: relative;
+  z-index: 1;
+}
+.gems-section::before {
+  content: '✦';
+  position: absolute;
+  top: -16px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 1.4rem;
+  color: var(--gold-bright);
+  background: var(--bg);
+  padding: 0 16px;
+}
+.gems-section h2 {
+  text-align: center;
+  font-size: 1.6rem;
+  color: var(--accent);
+  letter-spacing: 4px;
+  margin-bottom: 6px;
+}
+.gems-section .gems-sub {
+  text-align: center;
+  font-family: var(--font-sans);
+  font-size: 0.85rem;
+  color: var(--text-light);
+  margin-bottom: 30px;
+  letter-spacing: 1px;
+}
+.gems-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+  gap: 20px;
+}
+.gem-card {
+  background: var(--card-bg);
+  border-radius: var(--radius);
+  padding: 22px;
+  border: 2px solid #f0e0d0;
+  cursor: pointer;
+  transition: all var(--transition);
+  position: relative;
+  overflow: hidden;
+}
+.gem-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 3px;
+  background: linear-gradient(90deg, transparent, var(--hidden-gem), transparent);
+  transform: scaleX(0);
+  transform-origin: center;
+  transition: transform 0.5s;
+}
+.gem-card:hover::before { transform: scaleX(1); }
+.gem-card:hover {
+  border-color: var(--hidden-gem);
+  box-shadow: var(--shadow-md), 0 0 30px rgba(196,69,61,0.10);
+  transform: translateY(-4px);
+}
+.gem-card .gem-icon { font-size: 2.2rem; margin-bottom: 8px; }
+.gem-card .gem-title { font-size: 1rem; font-weight: 700; color: var(--ink); margin-bottom: 4px; }
+.gem-card .gem-era { font-size: 0.74rem; color: var(--gold); letter-spacing: 1px; }
+.gem-card .gem-desc {
+  font-size: 0.82rem; color: var(--text-light);
+  margin-top: 10px; line-height: 1.8;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.gem-card .gem-reveal {
+  font-family: var(--font-sans);
+  font-size: 0.72rem; color: var(--accent-glow);
+  margin-top: 12px; letter-spacing: 0.5px;
+}
+
+/* ================================================================
+   Quiz Section
+   ================================================================ */
+.quiz-section {
+  max-width: 800px;
+  margin: 50px auto 0;
+  padding: 30px 24px 50px;
+  border-top: 2px dashed var(--line);
+  text-align: center;
+  position: relative;
+  z-index: 1;
+}
+.quiz-section::before {
+  content: '🎯';
+  position: absolute;
+  top: -16px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 1.4rem;
+  background: var(--bg);
+  padding: 0 16px;
+}
+.quiz-section h2 {
+  font-size: 1.5rem;
+  color: var(--accent);
+  letter-spacing: 4px;
+  margin-bottom: 4px;
+}
+.quiz-sub {
+  font-family: var(--font-sans);
+  font-size: 0.82rem;
+  color: var(--text-light);
+  margin-bottom: 20px;
+  letter-spacing: 1px;
+}
+.quiz-score {
+  font-family: var(--font-sans);
+  font-size: 0.85rem;
+  color: var(--gold);
+  letter-spacing: 1px;
+  margin-bottom: 14px;
+}
+.quiz-score b { color: var(--accent); font-size: 1.1rem; }
+.quiz-clue-box {
+  background: var(--card-bg);
+  border: 2px solid #ebe3d5;
+  border-radius: var(--radius);
+  padding: 20px 24px;
+  margin: 0 auto 20px;
+  max-width: 540px;
+  text-align: left;
+  box-shadow: var(--shadow-sm);
+  transition: all 0.3s;
+}
+.quiz-clue-box .clue-label {
+  font-family: var(--font-sans);
+  font-size: 0.7rem;
+  color: var(--accent);
+  letter-spacing: 2px;
+  margin-bottom: 8px;
+}
+.quiz-clue-box .clue-text {
+  font-size: 0.92rem;
+  color: var(--text);
+  line-height: 1.9;
+}
+.quiz-options {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  max-width: 540px;
+  margin: 0 auto;
+}
+.quiz-opt {
+  font-family: var(--font);
+  font-size: 0.92rem;
+  padding: 14px 18px;
+  border-radius: var(--radius-sm);
+  border: 2px solid #ebe3d5;
+  background: var(--card-bg);
+  cursor: pointer;
+  transition: all 0.25s;
+  color: var(--ink);
+  letter-spacing: 1px;
+}
+.quiz-opt:hover {
+  border-color: var(--gold);
+  background: #fdf8ed;
+  box-shadow: var(--shadow-sm);
+  transform: translateY(-2px);
+}
+.quiz-opt.correct {
+  background: #d4edda;
+  border-color: #28a745;
+  color: #155724;
+  animation: correctPulse 0.5s ease;
+}
+.quiz-opt.wrong {
+  background: #f8d7da;
+  border-color: #dc3545;
+  color: #721c24;
+  animation: shake 0.45s ease;
+}
+@keyframes correctPulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.04); }
+}
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  20% { transform: translateX(-6px); }
+  40% { transform: translateX(6px); }
+  60% { transform: translateX(-4px); }
+  80% { transform: translateX(3px); }
+}
+.quiz-feedback {
+  font-family: var(--font-sans);
+  font-size: 0.9rem;
+  margin-top: 14px;
+  min-height: 24px;
+  letter-spacing: 1px;
+  transition: all 0.3s;
+}
+.quiz-feedback.correct-fb { color: #28a745; }
+.quiz-feedback.wrong-fb { color: #dc3545; }
+.quiz-next {
+  margin-top: 16px;
+  font-family: var(--font-sans);
+  font-size: 0.84rem;
+  padding: 10px 28px;
+  border-radius: 22px;
+  border: 1.5px solid var(--accent);
+  background: var(--accent);
+  color: #fff;
+  cursor: pointer;
+  letter-spacing: 1px;
+  transition: all 0.3s;
+  display: none;
+}
+.quiz-next.show { display: inline-block; }
+.quiz-next:hover {
+  background: var(--accent-glow);
+  box-shadow: var(--shadow-glow);
+}
+
+@media (max-width: 480px) {
+  .quiz-options { grid-template-columns: 1fr; }
+}
+
+/* ================================================================
+   No Results
+   ================================================================ */
+.no-results {
+  text-align: center;
+  padding: 50px;
+  color: var(--text-light);
+  font-size: 1rem;
+  display: none;
+  position: relative; z-index: 1;
+}
+.no-results.show { display: block; }
+
+/* ================================================================
+   Footer
+   ================================================================ */
+footer {
+  text-align: center;
+  padding: 36px 20px 50px;
+  font-family: var(--font-sans);
+  font-size: 0.76rem;
+  color: #b0a597;
+  letter-spacing: 1px;
+  position: relative;
+  z-index: 1;
+}
+footer::before {
+  content: '';
+  display: block;
+  width: 60px; height: 1px;
+  background: var(--line);
+  margin: 0 auto 18px;
+}
+
+/* ================================================================
+   Back to Top
+   ================================================================ */
+.back-top {
+  position: fixed;
+  bottom: 30px; right: 30px;
+  width: 48px; height: 48px;
+  border-radius: 50%;
+  background: var(--ink);
+  color: #faf7f1;
+  border: none;
+  cursor: pointer;
+  font-size: 1.1rem;
+  z-index: 90;
+  box-shadow: var(--shadow-md);
+  transition: all 0.35s;
+  display: flex; align-items: center; justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+}
+.back-top.show { opacity: 1; pointer-events: auto; }
+.back-top:hover {
+  background: var(--accent);
+  box-shadow: var(--shadow-glow);
+  transform: translateY(-3px);
+}
+
+/* ================================================================
+   Mobile
+   ================================================================ */
+@media (max-width: 768px) {
+  .timeline-wrap::before { left: 22px; }
+  .tl-item.left, .tl-item.right {
+    padding: 0 0 0 52px;
+    justify-content: flex-start;
+  }
+  .tl-dot { left: 22px; }
+  .era-label { text-align: left; padding-left: 32px; }
+  .era-label-inner { font-size: 0.9rem; padding: 7px 22px; letter-spacing: 3px; }
+  .hero-seal { text-shadow: 2px 2px 0 rgba(139,45,45,0.08); }
+  .modal { padding: 26px 18px; max-height: 90vh; }
+  .toolbar { padding: 10px 12px; gap: 6px; }
+  .btn { font-size: 0.74rem; padding: 5px 14px; }
+  .btn.era { font-size: 0.68rem; padding: 4px 10px; }
+  .hero-ring-wrap { width: 180px; height: 180px; }
+}
+
+@media (max-width: 480px) {
+  .tl-card .card-title { font-size: 1rem; }
+  .tl-card { padding: 16px 18px; }
+  .gem-card { padding: 16px; }
+  .hero-ring-wrap { width: 140px; height: 140px; }
+}
+</style>
+</head>
+<body>
+
+<!-- ===== Particle Canvas ===== -->
+<canvas id="particleCanvas"></canvas>
+
+<!-- ================================================================
+     HERO
+     ================================================================ -->
+<section class="hero" id="hero">
+  <div class="hero-ring-wrap">
+    <div class="hero-ring"></div>
+    <div class="hero-ring"></div>
+    <div class="hero-ring"></div>
+  </div>
+  <h1 class="hero-seal">数 理 千 秋</h1>
+  <p class="hero-sub">中国古代数理科技时间线</p>
+  <p class="hero-desc">
+    从上古结绳到清代汇通，系统梳理中国数学、天文、物理、算学领域的重大突破。<br>
+    还原被历史尘封的算法智慧 —— 中国古代从不缺乏理性思辨与数理传统。
+  </p>
+  <div class="hero-scroll-hint">▼ 探索时间线</div>
+</section>
+
+<!-- ================================================================
+     GLOBE
+     ================================================================ -->
+<section class="globe-section" id="globeSection">
+  <div class="globe-canvas" id="globeCanvas"></div>
+  <div class="globe-highlight" id="globeHighlight"></div>
+  <div class="globe-hint" id="globeHint">
+    <span>🖱️ 拖拽旋转</span>
+    <span>👆 点击卡片直达</span>
+  </div>
+</section>
+
+<!-- ================================================================
+     Toolbar
+     ================================================================ -->
+<nav class="toolbar" id="toolbar">
+  <div class="toolbar-group">
+    <span class="toolbar-label">📂 分类：</span>
+    <button class="btn active" data-cat="all">全部</button>
+    <button class="btn math" data-cat="数学">📐 数学</button>
+    <button class="btn astro" data-cat="天文">🌌 天文</button>
+    <button class="btn physics" data-cat="物理">⚙️ 物理</button>
+    <button class="btn comp" data-cat="算学">🧮 算学</button>
+    <button class="btn gem-btn" data-cat="冷门">🔍 冷门宝藏</button>
+  </div>
+  <div class="toolbar-group">
+    <span class="toolbar-label">📜 跳转：</span>
+    <button class="btn era active" data-era="all">全部</button>
+    <button class="btn era" data-era="上古先秦">上古先秦</button>
+    <button class="btn era" data-era="秦汉">秦汉</button>
+    <button class="btn era" data-era="魏晋南北朝">魏晋南北朝</button>
+    <button class="btn era" data-era="隋唐">隋唐</button>
+    <button class="btn era" data-era="宋元">宋元</button>
+    <button class="btn era" data-era="明">明</button>
+    <button class="btn era" data-era="清">清</button>
+  </div>
+</nav>
+
+<!-- ================================================================
+     Stats
+     ================================================================ -->
+<div class="stats-bar" id="stats">
+  <span>共 <b id="stat-total">0</b> 项科技成果</span>
+  <span>当前显示 <b id="stat-shown">0</b> 项</span>
+  <span>涵盖 <b>7</b> 个历史时期</span>
+  <span>其中 <b id="stat-gems">0</b> 项冷门宝藏</span>
+</div>
+
+<!-- ================================================================
+     Timeline
+     ================================================================ -->
+<div class="timeline-wrap" id="timeline"></div>
+
+<div class="no-results" id="noResults">
+  <p style="font-size:1.3rem;">📭</p>
+  <p>该分类下暂无匹配项，试试其他筛选条件</p>
+</div>
+
+<!-- ================================================================
+     Hidden Gems Section
+     ================================================================ -->
+<section class="gems-section" id="gemsSection">
+  <h2>🔍 被忽视的冷门成就</h2>
+  <p class="gems-sub">打破「中国古代只有经验、没有算法」的认知误区</p>
+  <div class="gems-grid" id="gemsGrid"></div>
+</section>
+
+<!-- ================================================================
+     Quiz Game
+     ================================================================ -->
+<section class="quiz-section" id="quizSection">
+  <h2>🎯 人物猜猜看</h2>
+  <p class="quiz-sub">根据科技线索，选出正确的历史人物</p>
+  <div class="quiz-score">得分：<b id="quizScore">0</b></div>
+  <div class="quiz-clue-box" id="quizClueBox">
+    <div class="clue-label">📜 线索</div>
+    <div class="clue-text" id="quizClue">加载中...</div>
+  </div>
+  <div class="quiz-options" id="quizOptions"></div>
+  <div class="quiz-feedback" id="quizFeedback"></div>
+  <button class="quiz-next" id="quizNext" onclick="nextQuiz()">下一题 →</button>
+</section>
+
+<!-- ================================================================
+     Footer
+     ================================================================ -->
+<footer>
+  <p>史料来源：《九章算术》《周髀算经》《梦溪笔谈》《数书九章》《测圆海镜》《四元玉鉴》《算法统宗》等</p>
+  <p style="margin-top:4px;">中国古代数理科技时间线 · 交互可视化 · 致敬被遗忘的算法先驱</p>
+</footer>
+
+<!-- ===== Back to Top ===== -->
+<button class="back-top" id="backTop" title="回到顶部" aria-label="回到顶部">↑</button>
+
+<!-- ===== Modal ===== -->
+<div class="modal-overlay" id="modalOverlay" style="display:none;">
+  <div class="modal" id="modal"></div>
+</div>
+
+<script>
+// ================================================================
+// DATA
+// ================================================================
+const timelineData = [
+  // ── 上古先秦 ──
+  {
+    id: 1, era: '上古先秦', year: '约前11世纪',
+    title: '算筹计数法',
+    person: '佚名（商周先民）',
+    cats: ['数学','算学'],
+    excerpt: '以竹、木、骨制小棍为算筹，采用严格的十进制位值制进行计数与运算，是世界上最早的十进制位值计数系统之一。',
+    principle: '算筹以纵式（丨、||、|||、||||、|||||）与横式（一、二、三、四、五）交替表示个十百千万各位数字，遇零空位。这一套系统完整实现了十进制位值制——同一符号在不同位置表示不同数值，比古罗马、古希腊的计数系统领先千年以上。更关键的是，位值制使得大数运算成为可能，直接催生了后来的"方程术"和"天元术"。',
+    value: '十进制位值制的完整实现，为后世所有中国数学奠定了基础。印度-阿拉伯数字传入前，中国是唯一使用完整十进制位值制的文明，深刻影响了东亚数学发展。',
+    isHidden: false,
+    image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/Counting_rod_attached_vertical.png/400px-Counting_rod_attached_vertical.png'
+  },
+  {
+    id: 2, era: '上古先秦', year: '约前11世纪',
+    title: '商高定理（勾股定理）',
+    person: '商高（周公时代数学家）',
+    cats: ['数学'],
+    excerpt: '《周髀算经》中商高答周公问，明确陈述"勾三股四弦五"，是勾股定理最早的文献记录，比毕达哥拉斯早约500年。',
+    principle: '商高提出"勾广三，股修四，径隅五"，并进一步阐述了"既方其外，半之一矩，环而共盘"的证明思想——通过将正方形旋转拼合来验证直角三角形三边关系。这不仅是特例，更蕴含了普遍性的几何证明思路。他还推导出"以日下为勾，日高为股，勾股各自乘，并而开方除之"的通式，说明已完全掌握a²+b²=c²。',
+    value: '世界最早的勾股定理文字记载。商高在几何学上的洞察力证明中国古代数学绝非停留在"经验总结"层面，而是具有严谨的演绎推理能力。',
+    isHidden: false,
+    image: 'https://commons.wikimedia.org/wiki/Special:FilePath/%E5%91%A8%E9%AB%80%E7%AE%97%E7%B6%93.jpg?width=500'
+  },
+  {
+    id: 3, era: '上古先秦', year: '约前5世纪',
+    title: '《墨经》光学八条',
+    person: '墨子及其后学',
+    cats: ['物理'],
+    excerpt: '《墨经》中记录了八条系统化的光学观察，涵盖小孔成像、平面镜、凹面镜、凸面镜的成像规律，是人类最早的光学理论体系。',
+    principle: '八条分别是：①影子成因（光至影亡）；②本影与半影；③小孔成像（光直线传播，上下颠倒）；④光的反射；⑤物与影的关系；⑥平面镜成像左右相反；⑦凹面镜成像（焦点内外成像不同）；⑧凸面镜成像。均基于"光的直线传播"这一核心假设推导。每条都以"定义→命题→论证"的演绎结构展开，完全超越时代。',
+    value: '比欧几里得《光学》早约200年，是世界上第一个系统化光学理论。它使用演绎结构而非经验罗列，是先秦理性科学的巅峰。',
+    isHidden: false,
+    image: 'https://commons.wikimedia.org/wiki/Special:FilePath/Mozi.jpg?width=500'
+  },
+  {
+    id: 4, era: '上古先秦', year: '约前5世纪',
+    title: '河图洛书与组合数学萌芽',
+    person: '上古先贤',
+    cats: ['数学'],
+    excerpt: '河图洛书是三阶幻方的最早实例——将1至9排列成纵横斜和均为15的方阵，是世界数学史上最早的组合构造。',
+    principle: '洛书（三阶幻方）：4 9 2 / 3 5 7 / 8 1 6——任意行、列、对角线之和均为15。这看似神秘，实则是对排列组合与对称性的最早探索。河图则揭示了阴阳五行背后的数理关系——生数与成数的配对（1-6水、2-7火、3-8木、4-9金、5-10土），包含了模运算与同余思想的原始形态。',
+    value: '幻方后来经由印度、阿拉伯传入欧洲。洛书是中国组合数学的始祖，证明在神秘主义外衣之下，先民已在探索抽象的数理结构。',
+    isHidden: true,
+    image: 'https://commons.wikimedia.org/wiki/Special:FilePath/Hetu_Luoshi_Sancai_Tuhui.jpg?width=500'
+  },
+  {
+    id: 5, era: '上古先秦', year: '约前5世纪',
+    title: '《考工记》力学实践',
+    person: '齐国工匠群体',
+    cats: ['物理'],
+    excerpt: '《考工记》系统记载了车轮制造、弓箭弹射、钟磬调音中的力学经验，涉及杠杆、弹性、惯性、摩擦等原理。',
+    principle: '记载了车轮直径与承载力的关系、弓体弯曲角度与弹性势能的关系（"引如满月，发如流星"）、钟体厚度与振动频率的关系等。尤其对"叁分其毂长，二在外，一在内，以置其辐"的轮轴杠杆分析，已触及力矩平衡的物理直觉。',
+    value: '世界上最早的工程技术百科全书之一，将力学原理系统应用于兵器、车辆、乐器制造。',
+    isHidden: false,
+    image: 'https://commons.wikimedia.org/wiki/Special:FilePath/%E8%80%83%E5%B7%A5%E8%AE%B0.jpg?width=500'
+  },
+
+  // ── 秦汉 ──
+  {
+    id: 6, era: '秦汉', year: '约1世纪（西汉末东汉初）',
+    title: '《九章算术》成书',
+    person: '张苍、耿寿昌等整理编定',
+    cats: ['数学','算学'],
+    excerpt: '中国现存最古老的数学经典，系统整理了246个数学问题及其解法，涵盖分数运算、比例、面积体积、方程等九大类。',
+    principle: '九章分别为：方田（分数与面积）、粟米（比例交换）、衰分（按比例分配）、少广（开平方开立方）、商功（体积计算）、均输（赋税均摊算法）、盈不足（盈不足术/双设法）、方程（线性方程组消元法，即高斯消元法）、勾股（勾股定理应用）。其中"盈不足"章是中国对数值算法的独特贡献——"双设法"是求解非线性问题的通用迭代框架。',
+    value: '中国数学的基石，标志着中国古代数学从零星问题上升为系统化体系。其算法化、实用化的范式塑造了整个东亚数学传统。',
+    isHidden: false,
+    image: 'https://commons.wikimedia.org/wiki/Special:FilePath/%E4%B9%9D%E7%AB%A0%E7%AE%97%E8%A1%93.png?width=500'
+  },
+  {
+    id: 7, era: '秦汉', year: '132年',
+    title: '张衡浑天说与地动仪',
+    person: '张衡',
+    cats: ['天文','物理'],
+    excerpt: '创制世界上第一台地震检测仪器——候风地动仪，并系统提出"浑天说"宇宙模型，描绘天如鸡子、地如蛋黄的球面宇宙图景。',
+    principle: '浑天说认为天球包裹地球，日月星辰附着在天球上随天旋转；地动仪利用悬垂摆（都柱）在地震波作用下失去平衡，触发对应方向的龙口吐珠，落入蟾蜍口中，实现方向指示。其力学原理涉及惯性、杠杆联动和重心偏移——本质上是一个精密的质量-弹簧-阻尼系统。',
+    value: '浑天说比托勒密地心说体系更具物理直觉；地动仪是人类历史上第一台科学仪器，将地震检测从占卜范畴提升到机械测量层面。',
+    isHidden: false,
+    image: 'https://commons.wikimedia.org/wiki/Special:FilePath/East_Han_seismograph_Sep_10_2016.jpg?width=500'
+  },
+  {
+    id: 8, era: '秦汉', year: '约前1世纪',
+    title: '《周髀算经》盖天说与数学',
+    person: '佚名（战国至西汉间成书）',
+    cats: ['数学','天文'],
+    excerpt: '中国最古老的数理天文学著作，以"盖天说"为框架，运用勾股定理进行天体距离测量，是数学与天文学深度融合的典范。',
+    principle: '以"日中立竿测影"为核心方法，利用竿高（股）、影长（勾）和勾股定理推算太阳高度与天球尺度。其中"七衡六间"模型以七个同心圆描述太阳一年的视运动轨迹，蕴含了早期的球面三角学思想。书中还提出了"径一周三"的圆周率近似值并在此基础上进行天文计算。',
+    value: '中国数理天文学的开山之作，首次将数学工具系统应用于宇宙尺度测量。',
+    isHidden: false,
+    image: 'https://commons.wikimedia.org/wiki/Special:FilePath/%E5%91%A8%E9%AB%80%E7%AE%97%E7%B6%93.jpg?width=500'
+  },
+
+  // ── 魏晋南北朝 ──
+  {
+    id: 9, era: '魏晋南北朝', year: '263年',
+    title: '刘徽割圆术与极限思想',
+    person: '刘徽',
+    cats: ['数学'],
+    excerpt: '为《九章算术》作注，发明"割圆术"，以圆内接正多边形逐次加倍边数逼近圆面积，系统运用了极限思想。',
+    principle: '从正六边形开始，每次将边数加倍（正十二、正二十四……正3072边形），计算其面积。刘徽指出"割之弥细，所失弥少，割之又割，以至于不可割，则与圆周合体而无所失矣"——这正是极限概念的精确表述。他求出圆周率π≈3.1416（徽率），并意识到这是一个无穷逼近的过程——"觚之细者，与圆合体"。',
+    value: '人类历史上最早明确表述极限思想的数学家之一。"割圆术"不仅是算法，更是一种无穷逼近的数学哲学——"穷竭法"在中国的独立发明。',
+    isHidden: false,
+    image: 'https://commons.wikimedia.org/wiki/Special:FilePath/%E4%B9%9D%E7%AB%A0%E7%AE%97%E8%A1%93%E6%B3%A8.jpg?width=500'
+  },
+  {
+    id: 10, era: '魏晋南北朝', year: '约480年',
+    title: '祖冲之圆周率精确到七位小数',
+    person: '祖冲之',
+    cats: ['数学'],
+    excerpt: '利用"缀术"将圆周率精确到3.1415926 < π < 3.1415927，这一精度保持了将近1000年的世界纪录。',
+    principle: '祖冲之在前人割圆术基础上，可能使用了某种快速收敛的级数或迭代算法（"缀术"已失传）。他给出了两个分数近似值：约率（22/7）和密率（355/113），后者在1000多年后被西方重新发现。355/113精确到六位小数，其简洁与精度至今令人惊叹——它是分母小于16604的所有分数中最接近π的。',
+    value: '中国古代计算数学的巅峰成就之一。密率355/113是分母小于16604的所有分数中最接近π的，这一数学事实直到现代才被证明。祖冲之的成果打破了"中国数学缺乏精确性追求"的西方中心论偏见。',
+    isHidden: false,
+    image: 'https://commons.wikimedia.org/wiki/Special:FilePath/%E7%A5%96%E5%86%B2%E4%B9%8B%E9%9B%95%E5%83%8F.jpg?width=500'
+  },
+  {
+    id: 11, era: '魏晋南北朝', year: '约480年',
+    title: '祖暅原理（卡瓦列里原理）',
+    person: '祖暅（祖冲之之子）',
+    cats: ['数学','物理'],
+    excerpt: '"幂势既同，则积不容异"——若两立体在任意等高截面的面积相等，则体积相等。比意大利卡瓦列里早了1100多年。',
+    principle: '在计算球体体积时，祖暅发现利用牟合方盖（两圆柱正交公共部分），通过截面面积相等的关系，将球体积转化为已知的几何体进行求解。这一原理就是积分学中"切片法"的核心思想。他由此正确推导出球体积公式：V=(4/3)πr³。这是人类首次不依赖实验而纯靠逻辑推导出球体积。',
+    value: '微积分思想的早期萌芽。祖暅原理逻辑等价于卡瓦列里原理（1635年），但早了整整1100多年。它证明中国古代几何学不仅计算精确，而且具有深刻的原理性思维。',
+    isHidden: true,
+    image: 'https://commons.wikimedia.org/wiki/Special:FilePath/%E4%B9%9D%E7%AB%A0%E7%AE%97%E8%A1%93%E6%B3%A8.jpg?width=500'
+  },
+  {
+    id: 12, era: '魏晋南北朝', year: '约3世纪',
+    title: '《海岛算经》重差术',
+    person: '刘徽',
+    cats: ['数学'],
+    excerpt: '刘徽著《海岛算经》，系统论述"重差术"——利用两次或多次测望数据计算不可到达的远距离目标的高度与距离，是中国测量数学的巅峰。',
+    principle: '在平地立两根竿（表），已知两竿距离，分别测量目标顶端经过两竿竿顶的视线与地面的夹角，利用相似三角形和重差法（差分消去未知量），即可求出海岛的高度和距离。这本质上是通过建立两个相似三角形方程，消去中间变量求解。与现代三角测量中的"交会法"原理一致。',
+    value: '重差术是中国古代的三角学——不依赖角度概念而用相似比例达到同样目的。九个测量问题覆盖了从平地测高到隔水测距的各种复杂场景。',
+    isHidden: true,
+    image: 'https://commons.wikimedia.org/wiki/Special:FilePath/%E6%B5%B7%E5%B2%9B%E7%AE%97%E7%BB%8F.jpg?width=500'
+  },
+  {
+    id: 13, era: '魏晋南北朝', year: '约5世纪',
+    title: '《张丘建算经》百鸡问题',
+    person: '张丘建',
+    cats: ['数学'],
+    excerpt: '"今有鸡翁一，值钱五；鸡母一，值钱三；鸡雏三，值钱一。凡百钱买鸡百只，问鸡翁、母、雏各几何？"——世界数学史上最早的不定方程（组）问题之一。',
+    principle: '设公鸡x只、母鸡y只、小鸡z只，列方程：x+y+z=100，5x+3y+z/3=100。两个方程三个未知数，属于不定方程组。张丘建给出了全部三组正整数解（4,18,78）、（8,11,81）、（12,4,84），并指出了不定方程求解的关键步骤。这比希腊丢番图的工作更加系统化。',
+    value: '不定分析（Diophantine analysis）在中国的独立起源。百鸡问题比丢番图的《算术》中的类似问题更具一般性，且张丘建明确意识到了多解性——这是数论思维的重要特征。',
+    isHidden: true,
+    image: 'https://commons.wikimedia.org/wiki/Special:FilePath/%E5%BC%A0%E4%B8%98%E5%BB%BA%E7%AE%97%E7%BB%8F.jpg?width=500'
+  },
+
+  // ── 隋唐 ──
+  {
+    id: 14, era: '隋唐', year: '656年',
+    title: '《算经十书》刊定',
+    person: '李淳风等奉敕编纂',
+    cats: ['数学','算学'],
+    excerpt: '唐代国子监将十部数学经典汇编为官方教材，建立了世界上最早的数学教育体系。包括《九章》《周髀》《海岛》《孙子》《五曹》《夏侯阳》《张丘建》《五经算术》《缉古算经》《缀术》。',
+    principle: '涵盖算术、代数、几何、测量、不定分析等广泛领域。其中《孙子算经》的"物不知数"问题（即今"中国剩余定理"的原型）、《缉古算经》的三次方程数值解，都是超越时代的成就。国子监设"算学博士"和"助教"，学生分两个专业修业六年。',
+    value: '世界上第一个由国家颁布的数学教科书体系。唐代官方数学教育比欧洲最早的大学数学教席早约600年。',
+    isHidden: false,
+    image: 'https://commons.wikimedia.org/wiki/Special:FilePath/%E5%91%A8%E9%AB%80%E7%AE%97%E7%B6%93.jpg?width=500'
+  },
+  {
+    id: 15, era: '隋唐', year: '7世纪初',
+    title: '王孝通《缉古算经》三次方程',
+    person: '王孝通',
+    cats: ['数学'],
+    excerpt: '王孝通在《缉古算经》中提出并解决了20个土木工程中的三次方程问题，是世界上最早系统处理三次方程数值解的著作。',
+    principle: '在修筑堤坝、开挖运河等工程中，经常遇到已知体积求边长的问题，导出的方程最高次数为三次。王孝通使用"开带从立方"法——通过算筹操作逐位逼近三次方程的正实根。他提出了三次方程的一般形式 x³+px²+qx=r，并给出了求解的程序化步骤。',
+    value: '三次方程的数值解法是中国古代代数的标志性成就之一。比波斯数学家奥马尔·海亚姆（11世纪）的几何解法更早，且是纯算法的数值解法。',
+    isHidden: true,
+    image: 'https://commons.wikimedia.org/wiki/Special:FilePath/%E7%BC%89%E5%8F%A4%E7%AE%97%E7%BB%8F.jpg?width=500'
+  },
+  {
+    id: 16, era: '隋唐', year: '727年',
+    title: '一行大衍历',
+    person: '一行（俗名张遂）',
+    cats: ['天文','数学'],
+    excerpt: '唐代高僧天文学家一行编制的《大衍历》，首次使用不等间距二次内插法处理天体运动的不均匀性，是历法数学化的里程碑。',
+    principle: '一行发现太阳视运动不是均匀的（近日点快、远日点慢），于是发明了"不等间距二次内插法"来计算任意时刻的太阳位置。这是数值分析中插值方法的首次系统运用，比牛顿-格雷果里内插公式早约900年。他还组织了大规模的子午线实测——这是世界上第一次科学意义上的子午线长度测量。',
+    value: '内插法（interpolation）是数值分析的核心工具之一。一行的工作标志着中国天文学从经验观测走向精密数学建模。',
+    isHidden: false,
+    image: 'https://commons.wikimedia.org/wiki/Special:FilePath/%E4%B8%80%E8%A1%8C%E5%83%A7.jpg?width=500'
+  },
+
+  // ── 宋元 ──
+  {
+    id: 17, era: '宋元', year: '约1050年',
+    title: '贾宪三角（帕斯卡三角）',
+    person: '贾宪',
+    cats: ['数学'],
+    excerpt: '贾宪在《黄帝九章算法细草》中给出二项式展开系数的三角形排列——"开方作法本源图"，比帕斯卡早600余年。',
+    principle: '贾宪三角不仅展示了(a+b)ⁿ的展开系数，更重要的是它被用于"增乘开方法"——一种求解任意高次方程正根的数值算法。每一层系数对应着相应次数的二项展开，通过逐层累加即可求得高次方程的近似解。增乘开方法的迭代过程与霍纳法（1819年）在数学上完全等价。',
+    value: '贾宪三角+增乘开方法=中国古代方程论的巅峰。这一组合相当于现代的"霍纳法"（1819年），而贾宪提前了约770年。这是中国古代代数算法的最高成就之一。',
+    isHidden: true,
+    image: 'https://commons.wikimedia.org/wiki/Special:FilePath/%E8%B4%BE%E5%AE%AA%E4%B8%89%E8%A7%92.jpg?width=500'
+  },
+  {
+    id: 18, era: '宋元', year: '1088年',
+    title: '《梦溪笔谈》科学百科全书',
+    person: '沈括',
+    cats: ['数学','天文','物理'],
+    excerpt: '沈括的《梦溪笔谈》记载了隙积术（高阶等差级数求和）、会圆术（弧矢割圆）、磁偏角发现、活字印刷等数百项科技观察。',
+    principle: '隙积术：计算堆垛酒坛或棋子等层叠物体的总数——即高阶等差数列求和的通用公式；会圆术：已知弓形的弦长和矢高，求弧长——相当于给出了arcsin的近似展开；磁偏角：发现磁针"能指南，然常微偏东，不全南也"——世界上最早记录地磁偏角。还在物理学上研究了共鸣、凸透镜聚焦、虹的成因等。',
+    value: '沈括是"中国的狄德罗"——百科全书式的科学巨人。李约瑟称《梦溪笔谈》为"中国科学史上的坐标"。他的隙积术是离散数学和组合数学的先驱。',
+    isHidden: false,
+    image: 'https://commons.wikimedia.org/wiki/Special:FilePath/%E5%A4%A2%E6%BA%AA%E7%AD%86%E8%AB%87.jpg?width=500'
+  },
+  {
+    id: 19, era: '宋元', year: '1092年',
+    title: '苏颂水运仪象台',
+    person: '苏颂、韩公廉',
+    cats: ['天文','物理'],
+    excerpt: '建造了世界上最早的天文钟——水运仪象台，集浑仪、浑象、报时于一体，以水力驱动，是机械工程与天文学的完美结合。',
+    principle: '高约12米的巨型装置，顶层为浑仪（用于观测），中层为浑象（天球仪演示天体运行），底层为报时系统。以恒定水流推动水轮，通过擒纵机构将连续水流转化为间歇运动——这是世界上最早的擒纵器，比欧洲早了约200年。整个系统以齿轮传动链将水轮的转动按比例分配给浑象旋转和报时木偶。',
+    value: '水运仪象台被誉为"天文钟的鼻祖"。其擒纵机构是机械钟表的核心发明，苏颂的《新仪象法要》详细绘制了全部机械图纸，是世界上现存最早的机械设计图集。',
+    isHidden: false,
+    image: 'https://commons.wikimedia.org/wiki/Special:FilePath/%E6%B0%B4%E9%81%8B%E5%84%80%E8%B1%A1%E5%8F%B0.jpg?width=500'
+  },
+  {
+    id: 20, era: '宋元', year: '1247年',
+    title: '大衍求一术（中国剩余定理）',
+    person: '秦九韶',
+    cats: ['数学','算学'],
+    excerpt: '秦九韶在《数书九章》中系统解决了"物不知数"类同余方程组问题，提出的"大衍求一术"即现代数论中的中国剩余定理。',
+    principle: '求解一次同余方程组 x≡rᵢ(mod mᵢ)，其中模数mᵢ两两互质。秦九韶发明了"大衍求一术"——通过辗转相除求乘率（即求模逆元），将多模数同余系统逐次化为单一模数。这一算法的数学结构与现代抽象代数中的中国剩余定理完全等价，且完全是构造性的——每一步都有明确的算法步骤。',
+    value: '这是中国古代数学最接近现代数论核心地带的成就。直到1801年高斯在《算术研究》中给出系统证明，西方才达到同等水平。秦九韶的方法不仅正确，而且完全算法化——是可计算的（computable）。这击碎了"中国数学没有一般性算法"的偏见。',
+    isHidden: true,
+    image: 'https://commons.wikimedia.org/wiki/Special:FilePath/%E6%95%B0%E4%B9%A6%E4%B9%9D%E7%AB%A0.jpg?width=500'
+  },
+  {
+    id: 21, era: '宋元', year: '1248年',
+    title: '天元术——符号代数的先驱',
+    person: '李冶',
+    cats: ['数学','算学'],
+    excerpt: '李冶在《测圆海镜》中系统运用"天元术"，以"天元"（即未知数x）列方程，建立了一整套符号代数体系。',
+    principle: '天元术设"天元一"为未知数，在筹算中用特殊位置的算筹表示，然后按多项式各项系数的位置排列出整个方程。这种"位置记数法"本质上相当于用矩阵/向量表示多项式——天元在上，常数在下，中间依次为各次系数。李冶能处理高达六次的多项式方程，其操作规则与现代多项式运算完全对应。',
+    value: '欧洲数学直到16-17世纪才完成从"修辞代数"到"符号代数"的跃迁。李冶的天元术证明宋元数学已经站在了符号代数的大门前。如果没有元代的文化断裂，中国很可能率先进入近代数学。',
+    isHidden: true,
+    image: 'https://commons.wikimedia.org/wiki/Special:FilePath/%E6%B5%8B%E5%9C%86%E6%B5%B7%E9%95%9C.jpg?width=500'
+  },
+  {
+    id: 22, era: '宋元', year: '1261年',
+    title: '杨辉三角与组合数学',
+    person: '杨辉',
+    cats: ['数学'],
+    excerpt: '杨辉在《详解九章算法》中重新整理了贾宪三角并补充了大量组合数学内容，包含二项式系数、组合数的多种性质和算法。',
+    principle: '杨辉不仅记录了二项式展开系数表，还探讨了组合数的多种性质：对称性(C(n,k)=C(n,n-k))、递推关系(C(n,k)=C(n-1,k-1)+C(n-1,k))、以及组合数在垛积问题中的应用。他还给出了1到n的平方和、立方和等幂和公式。',
+    value: '杨辉的工作使贾宪三角与组合数学建立了系统连接。帕斯卡在1654年才研究类似内容。杨辉三角是中国古代离散数学的集大成之作。',
+    isHidden: false,
+    image: 'https://commons.wikimedia.org/wiki/Special:FilePath/%E8%AF%A6%E8%A7%A3%E4%B9%9D%E7%AB%A0%E7%AE%97%E6%B3%95.jpg?width=500'
+  },
+  {
+    id: 23, era: '宋元', year: '1280年',
+    title: '授时历——古代最精密的历法',
+    person: '郭守敬、王恂等',
+    cats: ['天文','数学'],
+    excerpt: '元朝郭守敬等编制的《授时历》，以365.2425日为回归年长度，与现行公历相同但早了301年，是古代最精确的历法。',
+    principle: '授时历运用了三次差内插法（"招差术"）处理天体运动，比一行更进一步。还创造了"弧矢割圆术"——将球面天文学问题转化为平面三角问题，利用类似球面三角的方法计算天体位置。郭守敬还发明了简仪、仰仪等十余种精密天文仪器，在全国设立了27个观测站进行大规模实测。',
+    value: '授时历的回归年精度与格里高利历（1582年）完全相同，但早了三个世纪。它标志着中国数理天文学达到了精确科学的水平——理论与观测高度一致。',
+    isHidden: false,
+    image: 'https://commons.wikimedia.org/wiki/Special:FilePath/%E6%8E%88%E6%97%B6%E5%8E%86.jpg?width=500'
+  },
+  {
+    id: 24, era: '宋元', year: '1303年',
+    title: '四元术——多元高次方程组',
+    person: '朱世杰',
+    cats: ['数学','算学'],
+    excerpt: '朱世杰在《四元玉鉴》中将天元术推广到四元（天、地、人、物四个未知数），可列解多元高次方程组，达到宋元数学的最高峰。',
+    principle: '四元术以"天、地、人、物"代表四个未知数(x,y,z,w)，将多项式按各未知数的幂次排列在平面的四个方向上，形成一种"多项式矩阵"。通过消元法逐步消去未知数，最终化为一元高次方程求解。这套方法与现代多元多项式消元理论有相通之处。',
+    value: '多元高次方程组的系统解法，是中国古代代数的最高成就。朱世杰的《四元玉鉴》被萨顿（G.Sarton）称为"中世纪最杰出的数学著作之一"。',
+    isHidden: false,
+    image: 'https://commons.wikimedia.org/wiki/Special:FilePath/%E5%9B%9B%E5%85%83%E7%8E%89%E9%89%B4.jpg?width=500'
+  },
+  {
+    id: 25, era: '宋元', year: '1303年',
+    title: '垛积术与招差术——有限差分法',
+    person: '朱世杰',
+    cats: ['数学','算学'],
+    excerpt: '朱世杰系统研究了高阶等差级数求和（垛积术）与有限差分法（招差术），建立了牛顿前向差分公式的特例，比欧洲早约400年。',
+    principle: '垛积术：计算三角垛、撒星形垛、三角撒星形垛等各种几何堆垛的总数，给出了一系列高阶等差级数的求和公式；招差术：已知等间距点上的函数值，求插值多项式——即有限差分插值法。朱世杰的招差公式与牛顿前向差分公式在数学上等价，包含了从一次到四次的差分表算法。',
+    value: '这是数值分析中有限差分法的独立发明。朱世杰在14世纪初就掌握了需要微积分基础才能严格证明的级数求和公式。这一成就证明中国数学在算法化和数值化道路上走得极远。',
+    isHidden: true,
+    image: 'https://commons.wikimedia.org/wiki/Special:FilePath/%E5%9B%9B%E5%85%83%E7%8E%89%E9%89%B4.jpg?width=500'
+  },
+
+  // ── 明 ──
+  {
+    id: 26, era: '明', year: '1584年',
+    title: '十二平均律——音乐声学的数学革命',
+    person: '朱载堉',
+    cats: ['数学','物理'],
+    excerpt: '朱载堉以数学方法精确计算出十二平均律——将八度音程按2的12次方根等分，是音乐声学和数学物理的划时代成就。',
+    principle: '在一个八度内，将频率比2等分为12个半音，每个半音的频率比为¹²√2≈1.059463。朱载堉用81档大算盘开方，计算出这个无理数精确到25位小数！他将这个频率比命名为"密率"，并据此制造了调音用的弦准。其计算过程使用了类似二分法的迭代逼近。',
+    value: '十二平均律是现代音乐的基础。巴赫的《平均律键盘曲集》虽然通常被归功于这一体系，但朱载堉的数学完成比西方早了至少半个世纪，且精度惊人。李约瑟称之为"来自中国的礼物"。',
+    isHidden: true,
+    image: 'https://commons.wikimedia.org/wiki/Special:FilePath/%E6%A8%82%E5%BE%8B%E5%85%A8%E6%9B%B8.jpg?width=500'
+  },
+  {
+    id: 27, era: '明', year: '1592年',
+    title: '《算法统宗》与珠算普及',
+    person: '程大位',
+    cats: ['数学','算学'],
+    excerpt: '程大位编纂的《算法统宗》是一部以珠算为核心的实用数学大全，推动了珠算在全东亚的普及。',
+    principle: '珠算以算盘为工具，将十进制位值制物化为算珠在档位上的排列，加减乘除均有规范口诀（如"三下五除二"）。《算法统宗》收录了595个应用问题，涵盖田亩、赋税、商业等各方面，并配有歌诀便于记忆。珠算是算筹的进化——将位值制的抽象操作变为半自动化的机械操作。',
+    value: '珠算是中国古代算法思想的物质结晶——它将算筹的位值制原理转化为更高效便捷的机械操作。《算法统宗》传入日本、朝鲜后催生了和算传统。',
+    isHidden: false,
+    image: 'https://commons.wikimedia.org/wiki/Special:FilePath/%E7%AE%97%E6%B3%95%E7%B5%B1%E5%AE%97.jpg?width=500'
+  },
+  {
+    id: 28, era: '明', year: '1607年',
+    title: '徐光启译《几何原本》',
+    person: '徐光启、利玛窦',
+    cats: ['数学'],
+    excerpt: '徐光启与意大利传教士利玛窦合作，将欧几里得《几何原本》前六卷译为中文，开创了中西数学交流的新纪元。',
+    principle: '徐光启创造性地翻译了大量几何学术语——"点、线、面、直角、平行线、三角形"等至今沿用。他不仅忠实传达了欧几里得的公理化演绎体系，还在序言中深刻指出："此书为益，能令学理者祛其浮气，练其精心；学事者资其定法，发其巧思。"他敏锐地看出中西数学的互补性——中国的算法传统与西方的逻辑演绎可以相得益彰。',
+    value: '《几何原本》的中译是中国近代科学史上的里程碑事件。徐光启创造的数学译名奠定了整个汉字文化圈的数学术语体系。',
+    isHidden: false,
+    image: 'https://commons.wikimedia.org/wiki/Special:FilePath/%E5%B9%BE%E4%BD%95%E5%8E%9F%E6%9C%AC.jpg?width=500'
+  },
+
+  // ── 清 ──
+  {
+    id: 29, era: '清', year: '17-18世纪',
+    title: '梅文鼎中西数学汇通',
+    person: '梅文鼎',
+    cats: ['数学','天文'],
+    excerpt: '清代数学家梅文鼎系统研究中西数学，试图沟通中国传统算法与传入的欧几里得几何学，著有《中西算学通》等80余种著作。',
+    principle: '梅文鼎发现中国传统勾股术与欧几里得几何学在本质上相通，他试图用中国传统方法重新证明西方几何定理，同时也用西方方法整理中国古算。他还独立研究了球面三角学，并提出了"方田通法"等独创算法。他的工作体现了"中西会通"的学术理想——不是简单的翻译，而是深层的融合创新。',
+    value: '梅文鼎代表了中国学者面对西学冲击时的理性态度——既不盲目排外也不妄自菲薄。他被康熙帝誉为"历算第一名家"，其著作传入日本后影响了整个东亚数学界。',
+    isHidden: false,
+    image: 'https://commons.wikimedia.org/wiki/Special:FilePath/%E6%A2%85%E6%B0%8F%E5%8F%A2%E6%9B%B8%E8%BE%91%E8%A6%81.jpg?width=500'
+  },
+  {
+    id: 30, era: '清', year: '18世纪',
+    title: '明安图无穷级数展开',
+    person: '明安图（蒙古族数学家）',
+    cats: ['数学'],
+    excerpt: '明安图独立研究圆周率与三角函数的无穷级数展开，证明了π的级数公式和正弦、反正弦的幂级数展开，是中国无穷级数理论的先驱。',
+    principle: '明安图证明了"割圆连比例"——将圆周六等分，利用连比例关系推导出π的无穷级数表示。他独立得到了相当于格雷果里级数（arctan x的展开）和牛顿级数的结果，并给出了严格的几何证明。他的方法以割圆术的极限思想为基础，结合了连比例和垛积术的中国传统技巧。',
+    value: '明安图的级数工作表明，即使在与西方科学相对隔绝的清代，中国数学家仍能独立开展高等数学研究。他是中国第一个系统研究无穷级数的数学家。',
+    isHidden: true,
+    image: 'https://commons.wikimedia.org/wiki/Special:FilePath/%E5%89%B2%E5%9C%86%E5%AF%86%E7%8E%87%E6%8D%B7%E6%B3%95.jpg?width=500'
+  },
+  {
+    id: 31, era: '清', year: '19世纪',
+    title: '李善兰考数根法与素数判定',
+    person: '李善兰',
+    cats: ['数学'],
+    excerpt: '李善兰在《考数根法》中系统研究了素数（"数根"）的判定方法，给出了费马小定理的等价表述，是中国近代数论研究的先驱。',
+    principle: '"数根"即素数——除1和自身外不能被其他正整数整除的数。李善兰提出：若aᵖ⁻¹≡1(mod p)对所有与p互质的a成立，则p很可能是素数。这正是费马小定理的逆命题判定法。他还研究了伪素数现象（即满足费马条件但不是素数的合数）。',
+    value: '李善兰是中国传统数学向近代数学转型的最后一位大师。他独立研究了西方数论的核心问题，并翻译了《几何原本》后九卷（前六卷由利玛窦和徐光启翻译），完成了跨越250年的文化接力。',
+    isHidden: false,
+    image: 'https://commons.wikimedia.org/wiki/Special:FilePath/%E8%80%83%E6%95%B8%E6%A0%B9%E6%B3%95.jpg?width=500'
+  },
+  {
+    id: 32, era: '清', year: '19世纪',
+    title: '华蘅芳翻译引入近代数学',
+    person: '华蘅芳',
+    cats: ['数学'],
+    excerpt: '华蘅芳与英国传教士傅兰雅合作，翻译了《代数术》《微积溯源》《三角数理》等大量西方近代数学著作，系统引入了微积分、代数和概率论。',
+    principle: '华蘅芳在翻译中创造性地处理了大量新概念的汉译——如"函数""微分""积分""级数"等术语的确立。他在《决疑数学》中首次系统介绍了概率论，成为中文世界最早的统计学教材。他还在教学中倡导"中西并重"，认为中国古算的算法思想与西方逻辑体系应该融合。',
+    value: '华蘅芳的翻译工作是中国近代数学教育的基石。他创造的大量数学译名沿用至今，搭建了中国从传统数学走向现代数学的桥梁。',
+    isHidden: true,
+    image: 'https://commons.wikimedia.org/wiki/Special:FilePath/%E4%BB%A3%E6%95%B0%E8%A1%93.jpg?width=500'
+  }
+];
+
+// ================================================================
+// PARTICLE CANVAS
+// ================================================================
+(function() {
+  const canvas = document.getElementById('particleCanvas');
+  const ctx = canvas.getContext('2d');
+  let particles = [];
+  const maxParticles = 60;
+
+  function resize() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+  }
+  resize();
+  window.addEventListener('resize', resize);
+
+  class Particle {
+    constructor() {
+      this.reset();
+      this.y = Math.random() * canvas.height;
+    }
+    reset() {
+      this.x = Math.random() * canvas.width;
+      this.y = canvas.height + 10;
+      this.size = Math.random() * 2.5 + 0.8;
+      this.speed = Math.random() * 0.4 + 0.15;
+      this.opacity = Math.random() * 0.5 + 0.1;
+      this.wobble = Math.random() * 0.4;
+      this.wobbleSpeed = Math.random() * 0.02 + 0.005;
+      this.phase = Math.random() * Math.PI * 2;
+    }
+    update() {
+      this.y -= this.speed;
+      this.x += Math.sin(this.phase) * this.wobble;
+      this.phase += this.wobbleSpeed;
+      if (this.y < -20) this.reset();
+    }
+    draw(ctx) {
+      ctx.beginPath();
+      ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(184,134,11,${this.opacity})`;
+      ctx.fill();
+      // glow
+      ctx.beginPath();
+      ctx.arc(this.x, this.y, this.size * 2.5, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(212,168,67,${this.opacity * 0.15})`;
+      ctx.fill();
+    }
+  }
+
+  for (let i = 0; i < maxParticles; i++) {
+    particles.push(new Particle());
+  }
+
+  function animate() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    particles.forEach(p => { p.update(); p.draw(ctx); });
+    requestAnimationFrame(animate);
+  }
+  animate();
+})();
+
+// ================================================================
+// STATE
+// ================================================================
+let activeCat = 'all';
+
+// ================================================================
+// RENDER TIMELINE
+// ================================================================
+function renderTimeline() {
+  const container = document.getElementById('timeline');
+  const noResults = document.getElementById('noResults');
+  let filtered = timelineData.filter(item => {
+    if (activeCat === 'all') return true;
+    if (activeCat === '冷门') return item.isHidden;
+    return item.cats.includes(activeCat);
+  });
+
+  document.getElementById('stat-total').textContent = timelineData.length;
+  document.getElementById('stat-shown').textContent = filtered.length;
+  document.getElementById('stat-gems').textContent = timelineData.filter(i => i.isHidden).length;
+  noResults.classList.toggle('show', filtered.length === 0);
+
+  let html = '';
+  let currentEra = '';
+  let side = false;
+
+  filtered.forEach(item => {
+    if (item.era !== currentEra) {
+      currentEra = item.era;
+      side = false;
+      html += `<div class="era-label" id="era-${currentEra}"><span class="era-label-inner">${currentEra}</span></div>`;
+    }
+    const sideClass = side ? 'right' : 'left';
+    side = !side;
+    const gemClass = item.isHidden ? ' gem-card' : '';
+    const dotClass = item.isHidden ? ' gem-dot' : '';
+
+    const catBadges = item.cats.map(c => {
+      const clsMap = { '数学':'cat-math', '天文':'cat-astro', '物理':'cat-physics', '算学':'cat-comp' };
+      return `<span class="${clsMap[c]||''}">${c}</span>`;
+    }).join('');
+
+    html += `
+      <div class="tl-item ${sideClass}" data-id="${item.id}" data-era="${item.era}" data-cats="${item.cats.join(',')}" data-hidden="${item.isHidden}">
+        <div class="tl-dot${dotClass}"></div>
+        <div class="tl-card${gemClass}" onclick="openModal(${item.id})">
+          ${item.isHidden ? '<span class="card-gem-badge">🔍 冷门</span>' : ''}
+          <div class="card-year">${item.year}</div>
+          <div class="card-title">${item.isHidden ? '💎 ' : ''}${item.title}</div>
+          <div class="card-person">👤 ${item.person}</div>
+          <div class="card-cats">${catBadges}</div>
+          <div class="card-excerpt">${item.excerpt}</div>
+          <div class="card-hint">点击查看技术原理 →</div>
+        </div>
+      </div>`;
+  });
+
+  container.innerHTML = html;
+
+  // Re-trigger scroll animations for new items
+  setTimeout(setupScrollAnimations, 50);
+}
+
+// ================================================================
+// RENDER GEMS GRID
+// ================================================================
+function renderGems() {
+  const gems = timelineData.filter(item => item.isHidden);
+  const grid = document.getElementById('gemsGrid');
+  grid.innerHTML = gems.map(item => `
+    <div class="gem-card" onclick="openModal(${item.id})">
+      <div class="gem-icon">💎</div>
+      <div class="gem-title">${item.title}</div>
+      <div class="gem-era">${item.year} · ${item.era}</div>
+      <div class="gem-desc">${item.excerpt}</div>
+      <div class="gem-reveal">点击揭秘 →</div>
+    </div>
+  `).join('');
+}
+
+// ================================================================
+// SCROLL ANIMATIONS (Intersection Observer)
+// ================================================================
+function setupScrollAnimations() {
+  const items = document.querySelectorAll('.tl-item');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+      }
+    });
+  }, { threshold: 0.15, rootMargin: '0px 0px -40px 0px' });
+
+  items.forEach(item => observer.observe(item));
+}
+
+// initial setup after first render
+setTimeout(setupScrollAnimations, 100);
+
+// ================================================================
+// MODAL
+// ================================================================
+let currentModalId = null;
+
+function openModal(id) {
+  const item = timelineData.find(d => d.id === id);
+  if (!item) return;
+  currentModalId = id;
+  document.body.style.overflow = 'hidden';
+
+  const overlay = document.getElementById('modalOverlay');
+  const modal = document.getElementById('modal');
+
+  const catBadges = item.cats.map(c => {
+    const clsMap = { '数学':'cat-math', '天文':'cat-astro', '物理':'cat-physics', '算学':'cat-comp' };
+    return `<span class="${clsMap[c]||''}">${c}</span>`;
+  }).join('');
+
+  modal.innerHTML = `
+    <button class="modal-close" onclick="closeModal()" aria-label="关闭">✕</button>
+    <div class="m-era">${item.era} · ${item.year}</div>
+    <div class="m-title">${item.title}</div>
+    <div class="m-person">👤 ${item.person}</div>
+    <div class="m-cats">${catBadges}</div>
+    ${item.isHidden ? '<div class="m-gem-tag">🔍 冷门宝藏 · 被忽视的科技成就</div>' : ''}
+    ${item.image ? `
+    <div class="m-image-wrap">
+      <img src="${item.image}" alt="${item.title}" loading="lazy"
+           onerror="this.style.display='none';this.nextElementSibling.classList.add('show')"
+           onload="this.style.display='block';this.nextElementSibling.classList.remove('show')">
+      <div class="m-image-fallback">
+        <span class="fallback-icon">📜</span>
+        <span>${item.title}古籍书影</span>
+        <span class="fallback-text">图片加载中...</span>
+      </div>
+    </div>` : ''}
+    <section>
+      <h3>📜 历史背景</h3>
+      <p>${item.excerpt}</p>
+    </section>
+    <section>
+      <h3>⚙️ 技术原理</h3>
+      <p>${item.principle}</p>
+    </section>
+    <section>
+      <h3>🏆 历史价值</h3>
+      <p>${item.value}</p>
+    </section>
+  `;
+
+  overlay.style.display = 'flex';
+  modal.scrollTop = 0;
+}
+
+function closeModal() {
+  document.getElementById('modalOverlay').style.display = 'none';
+  document.body.style.overflow = '';
+  currentModalId = null;
+}
+
+document.getElementById('modalOverlay').addEventListener('click', function(e) {
+  if (e.target === this) closeModal();
+});
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') closeModal();
+});
+
+// Keyboard navigation in modal
+document.addEventListener('keydown', function(e) {
+  if (!currentModalId) return;
+  const currentIdx = timelineData.findIndex(d => d.id === currentModalId);
+  if (e.key === 'ArrowRight' && currentIdx < timelineData.length - 1) {
+    openModal(timelineData[currentIdx + 1].id);
+  }
+  if (e.key === 'ArrowLeft' && currentIdx > 0) {
+    openModal(timelineData[currentIdx - 1].id);
+  }
+});
+
+// ================================================================
+// FILTER
+// ================================================================
+function setCategory(cat) {
+  activeCat = cat;
+  document.querySelectorAll('[data-cat]').forEach(b => {
+    b.classList.toggle('active', b.dataset.cat === cat);
+  });
+  renderTimeline();
+}
+
+document.querySelectorAll('[data-cat]').forEach(btn => {
+  btn.addEventListener('click', () => setCategory(btn.dataset.cat));
+});
+
+// ================================================================
+// ERA JUMP
+// ================================================================
+document.querySelectorAll('[data-era]').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const era = btn.dataset.era;
+    document.querySelectorAll('[data-era]').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+
+    if (era === 'all') {
+      // Scroll to top of timeline
+      document.getElementById('timeline').scrollIntoView({ behavior: 'smooth', block: 'start' });
+      return;
+    }
+
+    const target = document.getElementById('era-' + era);
+    if (target) {
+      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      const inner = target.querySelector('.era-label-inner');
+      inner.classList.add('highlight');
+      setTimeout(() => inner.classList.remove('highlight'), 1200);
+    }
+  });
+});
+
+// ================================================================
+// BACK TO TOP
+// ================================================================
+const backTopBtn = document.getElementById('backTop');
+backTopBtn.addEventListener('click', () => {
+  document.getElementById('hero').scrollIntoView({ behavior: 'smooth' });
+  document.querySelectorAll('[data-era]').forEach(b => {
+    b.classList.toggle('active', b.dataset.era === 'all');
+  });
+  document.querySelectorAll('[data-cat]').forEach(b => {
+    b.classList.toggle('active', b.dataset.cat === 'all');
+  });
+  activeCat = 'all';
+  renderTimeline();
+});
+
+window.addEventListener('scroll', () => {
+  backTopBtn.classList.toggle('show', window.scrollY > 500);
+});
+
+// ================================================================
+// 3D TILT ON CARD HOVER
+// ================================================================
+document.addEventListener('mousemove', function(e) {
+  const cards = document.querySelectorAll('.tl-card:hover');
+  cards.forEach(card => {
+    const rect = card.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    const centerX = rect.width / 2;
+    const centerY = rect.height / 2;
+    const rotateX = (y - centerY) / centerY * -4;
+    const rotateY = (x - centerX) / centerX * 4;
+    card.style.transform = `translateY(-3px) perspective(600px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+  });
+});
+document.addEventListener('mouseleave', function() {
+  document.querySelectorAll('.tl-card').forEach(card => {
+    card.style.transform = '';
+  });
+});
+
+// ================================================================
+// INIT
+// ================================================================
+renderTimeline();
+renderGems();
+
+// Expose for globe module
+window.timelineData = timelineData;
+window.scrollToTimelineEntry = function(era, id) {
+  // Switch to all category to ensure the entry is visible
+  if (activeCat !== 'all') {
+    activeCat = 'all';
+    document.querySelectorAll('[data-cat]').forEach(b => {
+      b.classList.toggle('active', b.dataset.cat === 'all');
+    });
+    renderTimeline();
+  }
+  // Small delay to let render complete
+  setTimeout(() => {
+    const eraEl = document.getElementById('era-' + era);
+    if (eraEl) {
+      eraEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      const inner = eraEl.querySelector('.era-label-inner');
+      if (inner) {
+        inner.classList.add('highlight');
+        setTimeout(() => inner.classList.remove('highlight'), 1200);
+      }
+    }
+  }, 200);
+  // After scroll, open the modal for this entry
+  setTimeout(() => {
+    if (typeof openModal === 'function') openModal(id);
+  }, 800);
+};
+
+// ================================================================
+// QUIZ GAME
+// ================================================================
+let quizScore = 0;
+let currentQuizItem = null;
+let quizAnswered = false;
+
+// Fake names pool for wrong answers (not in our data)
+const fakeNames = [
+  '王阳明', '郑玄', '班固', '司马迁', '诸葛亮', '曹操',
+  '顾恺之', '王羲之', '颜真卿', '吴道子', '韩愈', '柳宗元',
+  '李白', '杜甫', '白居易', '苏轼', '辛弃疾', '陆游',
+  '朱熹', '王夫之', '顾炎武', '黄宗羲', '康有为', '梁启超',
+  '管仲', '商鞅', '韩非', '孟子', '荀子', '庄子',
+  '张仲景', '华佗', '孙思邈', '李时珍', '毕昇', '蔡伦',
+  '赵过', '马钧', '杜诗', '宇文恺', '李春', '喻皓'
+];
+
+function initQuiz() {
+  quizScore = 0;
+  document.getElementById('quizScore').textContent = '0';
+  nextQuiz();
+}
+
+function nextQuiz() {
+  quizAnswered = false;
+  document.getElementById('quizFeedback').textContent = '';
+  document.getElementById('quizFeedback').className = 'quiz-feedback';
+  document.getElementById('quizNext').classList.remove('show');
+  document.querySelectorAll('.quiz-opt').forEach(b => {
+    b.classList.remove('correct', 'wrong');
+    b.disabled = false;
+  });
+
+  // Pick random item from timelineData
+  const pool = window.timelineData || [];
+  currentQuizItem = pool[Math.floor(Math.random() * pool.length)];
+
+  // Build clue from excerpt (strip to first 1-2 sentences)
+  let clue = currentQuizItem.excerpt;
+  // Truncate to avoid giving away too much
+  const sentences = clue.split(/[。！？]/);
+  if (sentences.length > 1 && sentences[0].length > 20) {
+    clue = sentences[0] + '。';
+  }
+
+  // Add era hint
+  const eraHint = `（年代：${currentQuizItem.era} · ${currentQuizItem.year}）`;
+  document.getElementById('quizClue').textContent = clue + ' ' + eraHint;
+
+  // Build options: 1 correct + 3 wrong
+  const correctPerson = currentQuizItem.person.replace(/（.*?）/g, '').split('、')[0].trim();
+  let wrongPool = fakeNames.filter(n => n !== correctPerson && !currentQuizItem.person.includes(n));
+  // Shuffle and pick 3
+  wrongPool = wrongPool.sort(() => Math.random() - 0.5).slice(0, 3);
+
+  const options = [correctPerson, ...wrongPool].sort(() => Math.random() - 0.5);
+
+  const optContainer = document.getElementById('quizOptions');
+  optContainer.innerHTML = options.map(name =>
+    `<button class="quiz-opt" onclick="answerQuiz(this, '${name.replace(/'/g, "\\'")}')">${name}</button>`
+  ).join('');
+}
+
+function answerQuiz(btn, chosenName) {
+  if (quizAnswered) return;
+  quizAnswered = true;
+
+  const correctPerson = currentQuizItem.person.replace(/（.*?）/g, '').split('、')[0].trim();
+  const isCorrect = chosenName === correctPerson;
+
+  // Disable all buttons
+  document.querySelectorAll('.quiz-opt').forEach(b => b.disabled = true);
+
+  const fb = document.getElementById('quizFeedback');
+  if (isCorrect) {
+    btn.classList.add('correct');
+    quizScore++;
+    document.getElementById('quizScore').textContent = quizScore;
+    fb.textContent = '✅ 正确！' + correctPerson + ' — ' + currentQuizItem.title;
+    fb.className = 'quiz-feedback correct-fb';
+  } else {
+    btn.classList.add('wrong');
+    // Highlight correct answer
+    document.querySelectorAll('.quiz-opt').forEach(b => {
+      if (b.textContent.trim() === correctPerson) b.classList.add('correct');
+    });
+    fb.textContent = '❌ 答案是：' + correctPerson + ' — ' + currentQuizItem.title;
+    fb.className = 'quiz-feedback wrong-fb';
+  }
+
+  document.getElementById('quizNext').classList.add('show');
+  document.getElementById('quizNext').textContent = quizScore >= 10 ? '🏆 太厉害了！下一题 →' : '下一题 →';
+}
+
+// Start quiz on load
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initQuiz);
+} else {
+  initQuiz();
+}
+</script>
+
+<!-- ================================================================
+     THREE.JS GLOBE
+     ================================================================ -->
+<script type="module">
+import * as THREE from 'three';
+
+const container = document.getElementById('globeCanvas');
+const highlight = document.getElementById('globeHighlight');
+const hintEl = document.getElementById('globeHint');
+const data = window.timelineData || [];
+
+// ── Scene setup ──
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(50, 2, 0.1, 20);
+camera.position.z = 6.5;
+
+const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+renderer.setClearColor(0x000000, 0);
+container.appendChild(renderer.domElement);
+
+// ── Lights ──
+scene.add(new THREE.AmbientLight(0xfffaf0, 3.5));
+const light1 = new THREE.DirectionalLight(0xffeedd, 2.5);
+light1.position.set(5, 3, 5);
+scene.add(light1);
+const light2 = new THREE.DirectionalLight(0xddeeff, 1.2);
+light2.position.set(-3, -1, -4);
+scene.add(light2);
+
+// ── Wireframe sphere ──
+const wireGeo = new THREE.SphereGeometry(2.6, 40, 24);
+const wireMat = new THREE.MeshBasicMaterial({
+  color: 0xb8860b, wireframe: true,
+  transparent: true, opacity: 0.12
+});
+const wireSphere = new THREE.Mesh(wireGeo, wireMat);
+scene.add(wireSphere);
+
+// ── Star particles ──
+const starsGeo = new THREE.BufferGeometry();
+const starsCount = 200;
+const starsPos = new Float32Array(starsCount * 3);
+for (let i = 0; i < starsCount; i++) {
+  const theta = Math.random() * Math.PI * 2;
+  const phi = Math.acos(2 * Math.random() - 1);
+  const r = 3.2 + Math.random() * 1.2;
+  starsPos[i * 3] = r * Math.sin(phi) * Math.cos(theta);
+  starsPos[i * 3 + 1] = r * Math.sin(phi) * Math.sin(theta);
+  starsPos[i * 3 + 2] = r * Math.cos(phi);
+}
+starsGeo.setAttribute('position', new THREE.BufferAttribute(starsPos, 3));
+const starsMat = new THREE.PointsMaterial({
+  color: 0xd4a843, size: 0.025,
+  transparent: true, opacity: 0.55,
+  blending: THREE.AdditiveBlending, depthWrite: false
+});
+const stars = new THREE.Points(starsGeo, starsMat);
+scene.add(stars);
+
+// ── Group for all cards ──
+const cardGroup = new THREE.Group();
+scene.add(cardGroup);
+
+// ── Category colors ──
+const catColors = {
+  '数学': 0x7b4b3a,
+  '天文': 0x1a5060,
+  '物理': 0x4a3a5e,
+  '算学': 0x2d5b3f
+};
+
+// ── Create card textures ──
+function createCardTexture(item, w, h) {
+  const canvas = document.createElement('canvas');
+  canvas.width = w;
+  canvas.height = h;
+  const ctx = canvas.getContext('2d');
+
+  // Card background
+  const radius = 14;
+  ctx.beginPath();
+  ctx.moveTo(radius, 0);
+  ctx.lineTo(w - radius, 0);
+  ctx.quadraticCurveTo(w, 0, w, radius);
+  ctx.lineTo(w, h - radius);
+  ctx.quadraticCurveTo(w, h, w - radius, h);
+  ctx.lineTo(radius, h);
+  ctx.quadraticCurveTo(0, h, 0, h - radius);
+  ctx.lineTo(0, radius);
+  ctx.quadraticCurveTo(0, 0, radius, 0);
+  ctx.closePath();
+  ctx.fillStyle = '#fffef8';
+  ctx.fill();
+  ctx.strokeStyle = '#ebe3d5';
+  ctx.lineWidth = 1.5;
+  ctx.stroke();
+
+  // Top color strip
+  const cat = item.cats[0];
+  const colorHex = '#' + (catColors[cat] || 0x8b2d2d).toString(16).padStart(6, '0');
+  ctx.fillStyle = colorHex;
+  ctx.beginPath();
+  ctx.moveTo(radius, 0);
+  ctx.lineTo(w - radius, 0);
+  ctx.quadraticCurveTo(w, 0, w, radius);
+  ctx.lineTo(w, 26);
+  ctx.lineTo(0, 26);
+  ctx.lineTo(0, radius);
+  ctx.quadraticCurveTo(0, 0, radius, 0);
+  ctx.closePath();
+  ctx.fill();
+
+  // Category label on strip
+  ctx.fillStyle = '#ffffff';
+  ctx.font = 'bold 13px "PingFang SC","Microsoft YaHei","Noto Sans SC",sans-serif';
+  ctx.textAlign = 'left';
+  ctx.fillText(cat, 14, 19);
+
+  // Hidden gem star
+  if (item.isHidden) {
+    ctx.fillStyle = '#ffcc00';
+    ctx.font = '15px sans-serif';
+    ctx.textAlign = 'right';
+    ctx.fillText('💎', w - 12, 20);
+  }
+
+  // Title
+  ctx.fillStyle = '#1a1008';
+  ctx.font = 'bold 20px "Noto Serif SC","Songti SC","SimSun","KaiTi",serif';
+  ctx.textAlign = 'left';
+  const title = item.title.length > 8 ? item.title.slice(0, 8) + '…' : item.title;
+  ctx.fillText(title, 14, 55);
+
+  // Year & Era
+  ctx.fillStyle = '#b8860b';
+  ctx.font = '13px "PingFang SC","Microsoft YaHei","Noto Sans SC",sans-serif';
+  ctx.fillText(item.year + ' · ' + item.era, 14, 80);
+
+  // Person
+  ctx.fillStyle = '#6b5c4a';
+  ctx.font = '12px "PingFang SC","Microsoft YaHei","Noto Sans SC",sans-serif';
+  const person = item.person.length > 10 ? item.person.slice(0, 10) + '…' : item.person;
+  ctx.fillText(person, 14, 100);
+
+  return new THREE.CanvasTexture(canvas);
+}
+
+// ── Build cards ──
+const cards = [];
+const cardSize = { w: 1.05, h: 0.55 };
+const sphereRadius = 2.65;
+const n = data.length;
+
+data.forEach((item, i) => {
+  const tex = createCardTexture(item, 420, 210);
+  tex.minFilter = THREE.LinearFilter;
+  tex.magFilter = THREE.LinearFilter;
+
+  const mat = new THREE.MeshStandardMaterial({
+    map: tex,
+    side: THREE.DoubleSide,
+    roughness: 0.55,
+    metalness: 0.05
+  });
+
+  const geo = new THREE.PlaneGeometry(cardSize.w, cardSize.h);
+  const mesh = new THREE.Mesh(geo, mat);
+
+  // Fibonacci sphere
+  const phi = Math.acos(1 - 2 * (i + 0.5) / n);
+  const theta = Math.PI * (1 + Math.sqrt(5)) * (i + 0.5);
+  const x = sphereRadius * Math.sin(phi) * Math.cos(theta);
+  const y = sphereRadius * Math.cos(phi);
+  const z = sphereRadius * Math.sin(phi) * Math.sin(theta);
+
+  mesh.position.set(x, y, z);
+  mesh.lookAt(0, 0, 0);
+  // Rotate 180 to face outward (since PlaneGeometry faces +Z)
+  mesh.rotateY(Math.PI);
+
+  mesh.userData = {
+    item: item,
+    origPos: mesh.position.clone(),
+    origQuat: mesh.quaternion.clone(),
+    index: i,
+    targetPos: mesh.position.clone(),
+    targetQuat: mesh.quaternion.clone()
+  };
+
+  cardGroup.add(mesh);
+  cards.push(mesh);
+});
+
+// ── Raycaster ──
+const raycaster = new THREE.Raycaster();
+raycaster.params.Points.threshold = 0.1;
+const mouse = new THREE.Vector2();
+
+// ── Interaction state ──
+let isDragging = false;
+let dragStart = { x: 0, y: 0 };
+let dragDelta = { x: 0, y: 0 };
+let groupRotX = 0.3; // slight initial tilt
+let groupRotY = 0;
+let autoRotate = true;
+let autoRotateSpeed = 0.15;
+let velocityX = 0;
+let velocityY = 0;
+let hoveredCard = null;
+let isScattering = false;
+
+// ── Mouse events ──
+function getNDC(e) {
+  const rect = renderer.domElement.getBoundingClientRect();
+  return {
+    x: ((e.clientX - rect.left) / rect.width) * 2 - 1,
+    y: -((e.clientY - rect.top) / rect.height) * 2 + 1
+  };
+}
+
+renderer.domElement.addEventListener('pointerdown', (e) => {
+  if (isScattering) return;
+  isDragging = true;
+  autoRotate = false;
+  const pos = getNDC(e);
+  dragStart = { x: pos.x, y: pos.y };
+  dragDelta = { x: 0, y: 0 };
+  document.getElementById('globeSection').classList.add('dragging');
+  hintEl.classList.add('fading');
+});
+
+window.addEventListener('pointermove', (e) => {
+  const pos = getNDC(e);
+  mouse.set(pos.x, pos.y);
+
+  if (isDragging) {
+    const dx = pos.x - dragStart.x;
+    const dy = pos.y - dragStart.y;
+    dragDelta.x += Math.abs(dx);
+    dragDelta.y += Math.abs(dy);
+    velocityY = dx * 2;
+    velocityX = dy * 2;
+    groupRotY += dx * 2;
+    groupRotX += dy * 2;
+    dragStart = { x: pos.x, y: pos.y };
+  } else if (!isScattering) {
+    // Hover detection
+    raycaster.setFromCamera(mouse, camera);
+    const intersects = raycaster.intersectObjects(cards);
+    if (intersects.length > 0) {
+      const obj = intersects[0].object;
+      if (hoveredCard !== obj) {
+        resetHover();
+        hoveredCard = obj;
+        obj.material.emissive = new THREE.Color(0x442211);
+        obj.material.emissiveIntensity = 0.35;
+        highlight.textContent = obj.userData.item.title;
+        highlight.classList.add('show');
+        renderer.domElement.style.cursor = 'pointer';
+      }
+    } else {
+      resetHover();
+      renderer.domElement.style.cursor = '';
+    }
+  }
+});
+
+window.addEventListener('pointerup', (e) => {
+  if (!isDragging) return;
+  const totalDrag = dragDelta.x + dragDelta.y;
+  isDragging = false;
+  document.getElementById('globeSection').classList.remove('dragging');
+
+  if (totalDrag < 0.015) {
+    // It was a click, not a drag
+    raycaster.setFromCamera(mouse, camera);
+    const intersects = raycaster.intersectObjects(cards);
+    if (intersects.length > 0) {
+      const obj = intersects[0].object;
+      scatterAndNavigate(obj);
+      return;
+    }
+  }
+  // Resume auto-rotate after a delay
+  setTimeout(() => { if (!isDragging && !isScattering) autoRotate = true; }, 1200);
+  hintEl.classList.remove('fading');
+});
+
+renderer.domElement.addEventListener('pointerleave', () => {
+  if (isDragging) {
+    isDragging = false;
+    document.getElementById('globeSection').classList.remove('dragging');
+    setTimeout(() => { if (!isDragging && !isScattering) autoRotate = true; }, 1200);
+    hintEl.classList.remove('fading');
+  }
+  resetHover();
+  renderer.domElement.style.cursor = '';
+});
+
+function resetHover() {
+  if (hoveredCard) {
+    hoveredCard.material.emissive = new THREE.Color(0x000000);
+    hoveredCard.material.emissiveIntensity = 0;
+    hoveredCard = null;
+  }
+  highlight.classList.remove('show');
+  renderer.domElement.style.cursor = '';
+}
+
+// ── Tornado Scatter & navigate ──
+function scatterAndNavigate(clickedCard) {
+  if (isScattering) return;
+  isScattering = true;
+  autoRotate = false;
+  resetHover();
+
+  const startTime = performance.now();
+  const duration = 1200;
+
+  // Pre-compute spiral targets for each card
+  const states = cards.map(card => {
+    const orig = card.userData.origPos.clone();
+    const dir = orig.clone().normalize();
+    // Cylindrical coords from original position
+    const r0 = Math.sqrt(orig.x * orig.x + orig.z * orig.z);
+    const theta0 = Math.atan2(orig.z, orig.x);
+    const y0 = orig.y;
+
+    // Tornado spiral target: cards expand outward, rotate around Y, and lift
+    const spiralTurns = 1.8 + Math.random() * 1.5;
+    const deltaTheta = spiralTurns * Math.PI * 2;
+    const targetR = sphereRadius + 2.2 + Math.random() * 2.8;
+    const targetY = y0 * 1.6 + (Math.random() - 0.5) * 2.5;
+
+    return {
+      card,
+      origPos: orig.clone(),
+      origQuat: card.userData.origQuat.clone(),
+      targetPos: new THREE.Vector3(
+        targetR * Math.cos(theta0 + deltaTheta),
+        targetY,
+        targetR * Math.sin(theta0 + deltaTheta)
+      ),
+      r0, theta0, y0,
+      targetR, deltaTheta, targetY
+    };
+  });
+
+  function animateTornado(now) {
+    const elapsed = now - startTime;
+    const t = Math.min(elapsed / duration, 1);
+
+    // Three-phase easing
+    let spiralEase, radialEase;
+    if (t < 0.25) {
+      // Phase 1: slow wind-up (ease in)
+      const p = t / 0.25;
+      spiralEase = p * p;
+      radialEase = p * p * p;
+    } else if (t < 0.75) {
+      // Phase 2: rapid spiral (linear-ish)
+      const p = (t - 0.25) / 0.5;
+      spiralEase = 0.25 + 0.75 * p;
+      radialEase = 0.125 + 0.875 * (1 - Math.pow(1 - p, 3));
+    } else {
+      // Phase 3: settle (ease out)
+      const p = (t - 0.75) / 0.25;
+      spiralEase = 1;
+      radialEase = 1 - Math.pow(1 - p, 4);
+    }
+
+    states.forEach(s => {
+      // Current angle = original + spiral rotation (proportional to ease)
+      const theta = s.theta0 + s.deltaTheta * spiralEase;
+      const r = s.r0 + (s.targetR - s.r0) * radialEase;
+      const y = s.y0 + (s.targetY - s.y0) * radialEase;
+
+      s.card.position.set(
+        r * Math.cos(theta),
+        y,
+        r * Math.sin(theta)
+      );
+
+      // Card faces direction of motion (tangent to spiral)
+      const tangent = new THREE.Vector3(
+        -r * Math.sin(theta),
+        0,
+        r * Math.cos(theta)
+      ).normalize();
+      const up = new THREE.Vector3(0, 1, 0);
+      const lookTarget = s.card.position.clone().add(tangent);
+      s.card.lookAt(lookTarget);
+      // Tilt cards slightly
+      s.card.rotateZ((Math.random() - 0.5) * 0.5 * radialEase);
+    });
+
+    // Highlight clicked card
+    if (clickedCard.material.emissive) {
+      clickedCard.material.emissive = new THREE.Color(0x664422);
+      clickedCard.material.emissiveIntensity = 0.5 * (1 - t);
+    }
+
+    if (t < 1) {
+      requestAnimationFrame(animateTornado);
+    } else {
+      if (clickedCard.material.emissive) {
+        clickedCard.material.emissive = new THREE.Color(0x000000);
+        clickedCard.material.emissiveIntensity = 0;
+      }
+      // Navigate
+      const item = clickedCard.userData.item;
+      if (window.scrollToTimelineEntry) {
+        window.scrollToTimelineEntry(item.era, item.id);
+      }
+      // Reassemble after delay
+      setTimeout(reassembleCards, 1800);
+    }
+  }
+
+  requestAnimationFrame(animateTornado);
+}
+
+function reassembleCards() {
+  const startTime = performance.now();
+  const duration = 900;
+
+  const states = cards.map(card => ({
+    card,
+    currentPos: card.position.clone(),
+    currentQuat: card.quaternion.clone(),
+    origPos: card.userData.origPos.clone(),
+    origQuat: card.userData.origQuat.clone()
+  }));
+
+  function animateBack(now) {
+    const elapsed = now - startTime;
+    const t = Math.min(elapsed / duration, 1);
+    // Reverse spiral ease — cards swirl back inward
+    const ease = 1 - Math.pow(1 - t, 2);
+    // Add slight residual rotation on return
+    const revTheta = (1 - ease) * Math.PI * 0.5;
+
+    states.forEach((s, i) => {
+      const mid = new THREE.Vector3().lerpVectors(s.currentPos, s.origPos, ease);
+      // Subtle reverse spiral
+      const dx = mid.x - s.origPos.x;
+      const dz = mid.z - s.origPos.z;
+      const cosR = Math.cos(revTheta);
+      const sinR = Math.sin(revTheta);
+      s.card.position.set(
+        s.origPos.x + dx * cosR - dz * sinR,
+        mid.y,
+        s.origPos.z + dx * sinR + dz * cosR
+      );
+      s.card.quaternion.slerpQuaternions(s.currentQuat, s.origQuat, ease);
+      s.card.lookAt(new THREE.Vector3(0, 0, 0));
+      s.card.rotateY(Math.PI);
+    });
+
+    if (t < 1) {
+      requestAnimationFrame(animateBack);
+    } else {
+      // Snap all to exact original positions
+      cards.forEach(card => {
+        card.position.copy(card.userData.origPos);
+        card.quaternion.copy(card.userData.origQuat);
+      });
+      isScattering = false;
+      autoRotate = true;
+    }
+  }
+
+  requestAnimationFrame(animateBack);
+}
+
+// ── Resize ──
+function resize() {
+  const section = document.getElementById('globeSection');
+  const w = section.clientWidth;
+  const h = section.clientHeight;
+  renderer.setSize(w, h, false);
+  camera.aspect = w / Math.max(h, 1);
+  camera.updateProjectionMatrix();
+}
+window.addEventListener('resize', resize);
+resize();
+
+// ── Animation loop ──
+function animate(time) {
+  requestAnimationFrame(animate);
+
+  // Auto-rotate
+  if (autoRotate && !isDragging && !isScattering) {
+    groupRotY += autoRotateSpeed * 0.016;
+  }
+
+  // Apply inertia
+  if (!isDragging && !isScattering) {
+    groupRotX += velocityX * 0.016;
+    groupRotY += velocityY * 0.016;
+    velocityX *= 0.94;
+    velocityY *= 0.94;
+    if (Math.abs(velocityX) < 0.0003) velocityX = 0;
+    if (Math.abs(velocityY) < 0.0003) velocityY = 0;
+  }
+
+  cardGroup.rotation.x = groupRotX;
+  cardGroup.rotation.y = groupRotY;
+
+  // Stars rotate slowly opposite for depth
+  stars.rotation.y += 0.0006;
+  stars.rotation.x += 0.0003;
+
+  renderer.render(scene, camera);
+}
+requestAnimationFrame(animate);
+</script>
+</body>
+</html>
